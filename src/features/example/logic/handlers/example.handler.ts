@@ -5,7 +5,7 @@ import { User } from '@fcai-sis/shared-models';
 /**
  * An example handler that creates an example document in the database
  */
-const handler = async (req: Request, res: Response) => {
+const handler = async (_: Request, res: Response) => {
   const example = await User.create({
     name: 'test',
     email: 'test@test.com',
