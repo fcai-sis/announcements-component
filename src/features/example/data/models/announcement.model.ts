@@ -28,6 +28,10 @@ const announcementSchema: Schema = new Schema<AnnouncementType>({
     enum: ["info", "warning", "danger"],
     default: "info",
   },
+  archived:{
+    type: Boolean,
+    default: false,
+  }
 });
 
 const announcementModelName = "Announcements";
