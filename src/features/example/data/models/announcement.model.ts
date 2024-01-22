@@ -19,6 +19,10 @@ const announcementSchema: Schema = new Schema<AnnouncementType>({
     type: Date,
     default: Date.now(),
   },
+  updatedAt:{
+    type: Date,
+    default: Date.now(),
+  },
   severity: {
     type: String,
     enum: ["info", "warning", "danger"],
