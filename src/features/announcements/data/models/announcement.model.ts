@@ -4,7 +4,7 @@ import mongoose, { InferSchemaType, Schema } from "mongoose";
 export const announcementSeverities = ["info", "warning", "danger"] as const;
 export type AnnouncementSeverity = typeof announcementSeverities[number];
 
-const announcementSchema: Schema = new Schema<AnnouncementType>({
+const announcementSchema = new Schema({
   authorId: {
     type: Schema.Types.ObjectId,
     ref: userModelName,
@@ -36,7 +36,9 @@ const announcementSchema: Schema = new Schema<AnnouncementType>({
   }
 });
 
-const announcementModelName = "Announcement";
+export type AnnouncementType = InferSchemaType<typeof announcementSchema>;
+
+export const announcementModelName = "Announcement";
 
 const AnnouncementModel = mongoose.model<AnnouncementType>(
   announcementModelName,
@@ -44,5 +46,3 @@ const AnnouncementModel = mongoose.model<AnnouncementType>(
 );
 
 export default AnnouncementModel;
-
-type AnnouncementType = InferSchemaType<typeof announcementSchema>;
