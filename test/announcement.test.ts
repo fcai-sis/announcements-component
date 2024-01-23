@@ -62,13 +62,226 @@ describe("Announcements", () => {
         });
 
         // Ensure the announcement was created in the database
-        const announcementInDatabase = await mongoose.model(announcementModelName).findOne({
+        const announcementCreated = await mongoose.model(announcementModelName).exists({
           _id: response.body.announcement._id,
           ...requestBody
         });
 
-        expect(announcementInDatabase).toBeTruthy();
+        expect(announcementCreated).toBeTruthy();
 
+      });
+    });
+
+    describe("when the request is invalid", () => {
+      describe("when the title is missing", () => {
+        it("should return 400 and an error message", async () => {
+
+          // Create the request body
+          const requestBody: Partial<AnnouncementType> = {
+            content: "content",
+            severity: "info",
+          };
+
+          // Make the request
+          const response = await request.post('/create').send(requestBody);
+
+          // Ensure the response is 400
+          expect(response.status).toBe(400);
+
+          // Ensure the response body looks like this: 
+          // { 
+          //    error: {
+          //        message,
+          //    }
+          // }
+          expect(response.body).toEqual({
+            error: {
+              message: expect.any(String),
+            },
+          });
+
+          // Ensure the announcement was not created in the database
+          const announcementsCount = await mongoose.model(announcementModelName).countDocuments();
+
+          expect(announcementsCount).toBe(0);
+        });
+      });
+
+      describe("when the title is not a string", () => {
+        it("should return 400 and an error message", async () => {
+
+          // Create the request body
+          const requestBody: Partial<AnnouncementType> = {
+            // @ts-ignore
+            title: 1,
+            content: "content",
+            severity: "info",
+          };
+
+          // Make the request
+          const response = await request.post('/create').send(requestBody);
+
+          // Ensure the response is 400
+          expect(response.status).toBe(400);
+
+          // Ensure the response body looks like this: 
+          // { 
+          //    error: {
+          //        message,
+          //    }
+          // }
+          expect(response.body).toEqual({
+            error: {
+              message: expect.any(String),
+            },
+          });
+
+          // Ensure the announcement was not created in the database
+          const announcementsCount = await mongoose.model(announcementModelName).countDocuments();
+
+          expect(announcementsCount).toBe(0);
+        });
+      });
+
+      describe("when the content is missing", () => {
+        it("should return 400 and an error message", async () => {
+
+          // Create the request body
+          const requestBody: Partial<AnnouncementType> = {
+            title: "title",
+            severity: "info",
+          };
+
+          // Make the request
+          const response = await request.post('/create').send(requestBody);
+
+          // Ensure the response is 400
+          expect(response.status).toBe(400);
+
+          // Ensure the response body looks like this: 
+          // { 
+          //    error: {
+          //        message,
+          //    }
+          // }
+          expect(response.body).toEqual({
+            error: {
+              message: expect.any(String),
+            },
+          });
+
+          // Ensure the announcement was not created in the database
+          const announcementsCount = await mongoose.model(announcementModelName).countDocuments();
+
+          expect(announcementsCount).toBe(0);
+        });
+      });
+
+      describe("when the content is not a string", () => {
+        it("should return 400 and an error message", async () => {
+
+          // Create the request body
+          const requestBody: Partial<AnnouncementType> = {
+            title: "title",
+            // @ts-ignore
+            content: 1,
+            severity: "info",
+          };
+
+          // Make the request
+          const response = await request.post('/create').send(requestBody);
+
+          // Ensure the response is 400
+          expect(response.status).toBe(400);
+
+          // Ensure the response body looks like this: 
+          // { 
+          //    error: {
+          //        message,
+          //    }
+          // }
+          expect(response.body).toEqual({
+            error: {
+              message: expect.any(String),
+            },
+          });
+
+          // Ensure the announcement was not created in the database
+          const announcementsCount = await mongoose.model(announcementModelName).countDocuments();
+
+          expect(announcementsCount).toBe(0);
+        });
+      });
+
+      describe("when the severity is missing", () => {
+        it("should return 400 and an error message", async () => {
+
+          // Create the request body
+          const requestBody: Partial<AnnouncementType> = {
+            title: "title",
+            content: "content",
+          };
+
+          // Make the request
+          const response = await request.post('/create').send(requestBody);
+
+          // Ensure the response is 400
+          expect(response.status).toBe(400);
+
+          // Ensure the response body looks like this: 
+          // { 
+          //    error: {
+          //        message,
+          //    }
+          // }
+          expect(response.body).toEqual({
+            error: {
+              message: expect.any(String),
+            },
+          });
+
+          // Ensure the announcement was not created in the database
+          const announcementsCount = await mongoose.model(announcementModelName).countDocuments();
+
+          expect(announcementsCount).toBe(0);
+        });
+      });
+
+      describe("when the severity is not valid", () => {
+        it("should return 400 and an error message", async () => {
+
+          // Create the request body
+          const requestBody: Partial<AnnouncementType> = {
+            title: "title",
+            content: "content",
+            // @ts-ignore
+            severity: "potato",
+          };
+
+          // Make the request
+          const response = await request.post('/create').send(requestBody);
+
+          // Ensure the response is 400
+          expect(response.status).toBe(400);
+
+          // Ensure the response body looks like this: 
+          // { 
+          //    error: {
+          //        message,
+          //    }
+          // }
+          expect(response.body).toEqual({
+            error: {
+              message: expect.any(String),
+            },
+          });
+
+          // Ensure the announcement was not created in the database
+          const announcementsCount = await mongoose.model(announcementModelName).countDocuments();
+
+          expect(announcementsCount).toBe(0);
+
+        });
       });
     });
   });

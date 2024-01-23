@@ -50,32 +50,35 @@ const middlewares = [
         )}`
       );
       res.status(400).json(
-        errors.array()[0].msg === 1
-          ? {
-            message: "Title is required",
-          }
-          : errors.array()[0].msg === 2
-            ? {
-              message: "Title must be a string",
-            }
-            : errors.array()[0].msg === 3
+        {
+          error:
+            errors.array()[0].msg === 1
               ? {
-                message: "Content is required",
+                message: "Title is required",
               }
-              : errors.array()[0].msg === 4
+              : errors.array()[0].msg === 2
                 ? {
-                  message: "Content must be a string",
+                  message: "Title must be a string",
                 }
-                : errors.array()[0].msg === 5
+                : errors.array()[0].msg === 3
                   ? {
-                    message: "Severity is required",
+                    message: "Content is required",
                   }
-                  : errors.array()[0].msg === 6
+                  : errors.array()[0].msg === 4
                     ? {
-                      message: `Severity must be one of these values: ${announcementSeverities}`
-                    } : {
-                      message: "Invalid request body",
+                      message: "Content must be a string",
                     }
+                    : errors.array()[0].msg === 5
+                      ? {
+                        message: "Severity is required",
+                      }
+                      : errors.array()[0].msg === 6
+                        ? {
+                          message: `Severity must be one of these values: ${announcementSeverities}`
+                        } : {
+                          message: "Invalid request body",
+                        }
+        }
       );
       return;
     }
