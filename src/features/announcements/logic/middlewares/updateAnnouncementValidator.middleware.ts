@@ -3,13 +3,13 @@ import { NextFunction, Request, Response } from "express";
 import logger from "../../../../core/logger";
 import { announcementSeverities } from "../../data/models/announcement.model";
 
-const updateAnnouncementValidatorMiddleware = [
+const updateAnnouncementValidator = [
   // param("announcementId").isMongoId().withMessage("Invalid announcement ID"),
   body("announcementId").isMongoId().withMessage("Invalid announcement ID"),
 
-  body("title").optional().trim().isString().withMessage("Title must be a string"),
+  body("title").optional().isString().withMessage("Title must be a string"),
 
-  body("content").optional().trim().isString().withMessage("Content must be a string"),
+body("content").optional().isString().withMessage("Content must be a string"),
 
   body("severity").optional().isIn(announcementSeverities).withMessage(`Severity must be one of these values: ${announcementSeverities}`),
 
@@ -30,4 +30,4 @@ const updateAnnouncementValidatorMiddleware = [
   },
 ];
 
-export default updateAnnouncementValidatorMiddleware;
+export default updateAnnouncementValidator;

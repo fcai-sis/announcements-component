@@ -7,6 +7,7 @@ import readAnnouncementHandler from "./handlers/readannouncement.handler";
 import deleteAnnouncementHandler from "./handlers/deleteannouncement.handler";
 import archiveAnnouncementHandler from "./handlers/archiveannouncement.handler";
 import updateAnnouncementHandler from "./handlers/updateAnnouncement.handler";
+import updateAnnouncementValidator from "./middlewares/updateAnnouncementValidator.middleware";
 
 export default (router: Router) => {
   router.post(
@@ -33,8 +34,8 @@ export default (router: Router) => {
     asyncHandler(archiveAnnouncementHandler)
   );
   router.put(
-    "/update/:announcementId",
-
+    "/update",
+    updateAnnouncementValidator,
     asyncHandler(updateAnnouncementHandler)
   );
 };
