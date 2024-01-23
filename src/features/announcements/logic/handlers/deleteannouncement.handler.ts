@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import AnnouncementModel from "features/announcements/data/models/announcement.model";
+import AnnouncementModel from "../../data/models/announcement.model";
 
 const handler = async (req: Request, res: Response) => {
   const announcement = req.params.id;
