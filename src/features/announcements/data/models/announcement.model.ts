@@ -37,6 +37,8 @@ const announcementSchema = new Schema({
 });
 
 export type AnnouncementType = InferSchemaType<typeof announcementSchema>;
+// Add TTL (Time To Live) index to 'archived' field
+announcementSchema.index({ archived: 1 }, { expireAfterSeconds: 31536000 }); // Delete after a year
 
 export const announcementModelName = "Announcement";
 
