@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+
 import AnnouncementModel from "../../data/models/announcement.model";
-import { userModelName } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
@@ -14,7 +14,6 @@ type HandlerRequest = Request<
 /*
  * Reads all announcements
  * */
-
 const handler = async (req: HandlerRequest, res: Response) => {
   // get the pagination parameters
   const page = req.body.page;
@@ -22,7 +21,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
 
   // read the announcements from the db
   const announcements = await AnnouncementModel.find()
-    // TODO: remove sensitive data from the FK object
+    // TODO: remove sensitive data from the author object
     // .populate(userModelName) // essentially replaces the FK with the object it's referring to
     .sort({ createdAt: -1 }) // sorts so that latest announcements show up first
     .skip((page - 1) * pageSize) // pagination
@@ -33,4 +32,5 @@ const handler = async (req: HandlerRequest, res: Response) => {
   });
 };
 
-export default handler;
+const readAnnouncementsHandler = handler;
+export default readAnnouncementsHandler;
