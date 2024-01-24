@@ -24,6 +24,7 @@ const announcementSchema = new Schema({
   },
   updatedAt: {
     type: Date,
+    default: null
   },
   severity: {
     type: String,

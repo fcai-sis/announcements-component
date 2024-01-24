@@ -1,36 +1,45 @@
 import { Request, Response } from "express";
-import AnnouncementModel, { AnnouncementSeverity } from "../../data/models/announcement.model";
+import AnnouncementModel, {
+  AnnouncementSeverity,
+} from "../../data/models/announcement.model";
 
 //TODO: Add the announcementId to the route param
 //TODO: Create middleware to check for if user authorized to update announcement
 type UpdateHandlerRequest = Request<
+  {
+    announcementId: string;
+  },
   {},
-  {},
-  { announcementId: string ,title?: string; content?: string; severity?: AnnouncementSeverity }
+  { title?: string; content?: string; severity?: AnnouncementSeverity }
 >;
 
-const updateAnnouncementHandler = async (req: UpdateHandlerRequest, res: Response) => {
-    // const announcementId = req.params.announcementId;
-    const announcementId = req.body.announcementId;
-    //TODO: update the updated at field
-    // Check if the announcement exists
-    const announcement = await AnnouncementModel.findByIdAndUpdate(announcementId, req.body, { new: true });
+const updateAnnouncementHandler = async (
+  req: UpdateHandlerRequest,
+  res: Response
+) => {
+  const announcementId = req.params.announcementId;
+  // Check if the announcement exists
+  const announcement = await AnnouncementModel.findByIdAndUpdate(
+    announcementId,
+    { ...req.body, updatedAt: Date.now() },
+    { new: true }
+  );
 
-    if (!announcement) {
-      return res.status(404).json({ error: "Announcement not found" });
-    }
+  if (!announcement) {
+    return res.status(404).json({ error: "Announcement not found" });
+  }
 
-    const response = {
-      announcement: {
-        _id: announcement._id,
-        title: announcement.title,
-        content: announcement.content,
-        severity: announcement.severity,
-        createdAt: announcement.createdAt,
-      }
-    }
+  const response = {
+    announcement: {
+      _id: announcement._id,
+      title: announcement.title,
+      content: announcement.content,
+      severity: announcement.severity,
+      createdAt: announcement.createdAt,
+    },
+  };
 
-    return res.status(200).json(response);
-}
+  return res.status(200).json(response);
+};
 
 export default updateAnnouncementHandler;
