@@ -1,16 +1,12 @@
-import { body, param, validationResult } from "express-validator";
 import { NextFunction, Request, Response } from "express";
+import { body, validationResult } from "express-validator";
+
 import logger from "../../../../core/logger";
 import { announcementSeverities } from "../../data/models/announcement.model";
 
 const updateAnnouncementValidator = [
-  // param("announcementId").isMongoId().withMessage("Invalid announcement ID"),
-  body("announcementId").isMongoId().withMessage("Invalid announcement ID"),
-
   body("title").optional().isString().withMessage("Title must be a string"),
-
-body("content").optional().isString().withMessage("Content must be a string"),
-
+  body("content").optional().isString().withMessage("Content must be a string"),
   body("severity").optional().isIn(announcementSeverities).withMessage(`Severity must be one of these values: ${announcementSeverities}`),
 
   (req: Request, res: Response, next: NextFunction) => {
