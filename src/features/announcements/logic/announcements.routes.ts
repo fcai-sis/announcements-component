@@ -1,6 +1,7 @@
 import { Router } from "express";
 
-import asyncHandler from "../../../core/asyncHandler";
+import { asyncHandler } from "@fcai-sis/shared-utilities";
+
 import createAnnouncementHandler from "./handlers/createAnnouncement.handler";
 import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAccouncementRequestBody.middleware";
 import readAnnouncementHandler from "./handlers/readannouncement.handler";
