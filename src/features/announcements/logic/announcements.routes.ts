@@ -22,25 +22,18 @@ export default (router: Router) => {
     asyncHandler(createAnnouncementHandler)
   );
   router.get(
-    "/",
-
-    // Pagination query params
+    "/read",
     paginationQueryParamsMiddleware,
-
     asyncHandler(readAnnouncementHandler)
   );
   router.delete(
-    "/delete/:announcementId",
-
+    "/delete",
     ensureAnnouncementIdInParamsMiddleware,
-
     asyncHandler(deleteAnnouncementHandler)
   );
   router.put(
     "/archive",
-
     ensureAnnouncementIdInParamsMiddleware,
-
     asyncHandler(archiveAnnouncementHandler)
   );
   router.put(
