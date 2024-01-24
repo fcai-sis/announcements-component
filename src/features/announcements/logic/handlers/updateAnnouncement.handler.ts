@@ -3,7 +3,6 @@ import AnnouncementModel, {
   AnnouncementSeverity,
 } from "../../data/models/announcement.model";
 
-//TODO: Add the announcementId to the route param
 //TODO: Create middleware to check for if user authorized to update announcement
 type UpdateHandlerRequest = Request<
   {
@@ -36,6 +35,7 @@ const updateAnnouncementHandler = async (
       content: announcement.content,
       severity: announcement.severity,
       createdAt: announcement.createdAt,
+      updatedAt: announcement.updatedAt,
     },
   };
 
