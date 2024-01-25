@@ -28,7 +28,13 @@ const handler = async (req: HandlerRequest, res: Response) => {
     .limit(pageSize);
 
   return res.status(200).send({
-    data: announcements,
+    announcements: announcements.map(announcement => ({
+      ...announcement.toObject(),
+      __v: undefined,
+      archived: undefined,
+      authorId: undefined,
+      author: { username: "username" },
+    })),
   });
 };
 

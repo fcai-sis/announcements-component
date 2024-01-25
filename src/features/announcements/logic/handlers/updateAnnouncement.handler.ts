@@ -39,7 +39,7 @@ const updateAnnouncementHandler = async (
     },
   };
 
-  return res.status(200).json(response);
+  return res.status(202).json(response);
 };
 
 export default updateAnnouncementHandler;

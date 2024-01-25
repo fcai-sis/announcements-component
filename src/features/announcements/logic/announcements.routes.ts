@@ -13,6 +13,10 @@ import ensureAnnouncementIdInParamsMiddleware from "./middlewares/ensureAnnounce
 import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAccouncementRequestBody.middleware";
 
 export default (router: Router) => {
+
+  /*
+   * Create announcement
+   **/
   router.post(
     "/create",
 
@@ -21,25 +25,53 @@ export default (router: Router) => {
 
     asyncHandler(createAnnouncementHandler)
   );
+
+  /*
+   * Read paginated announcements
+   **/
   router.get(
     "/read",
+
+    // Validate request query params for pagination
     paginationQueryParamsMiddleware,
+
     asyncHandler(readAnnouncementHandler)
   );
+
+  /*
+   * Delete announcement
+   **/
   router.delete(
     "/delete",
+
+    // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
+
     asyncHandler(deleteAnnouncementHandler)
   );
+
+  /*
+   * Archive announcement
+   **/
   router.put(
     "/archive",
+
+    // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
+
     asyncHandler(archiveAnnouncementHandler)
   );
-  router.put(
+
+  /*
+   * Update announcement
+   **/
+  router.patch(
     "/update/:announcementId",
 
+    // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
+
+    // Validate request body
     updateAnnouncementValidator,
 
     asyncHandler(updateAnnouncementHandler)

@@ -12,28 +12,32 @@ const middlewares = [
     .body("title")
 
     .exists()
-    .withMessage(1)
+    .withMessage("Title is required")
 
     .isString()
-    .withMessage(2),
+    .withMessage("Title must be a string"),
 
   validator
     .body("content")
 
     .exists()
-    .withMessage(3)
+    .withMessage("Content is required")
 
     .isString()
-    .withMessage(4),
+    .withMessage("Content must be a string"),
 
   validator
     .body("severity")
 
     .exists()
-    .withMessage(5)
+    .withMessage("Severity is required")
 
     .isIn(announcementSeverities)
-    .withMessage(6),
+    .withMessage(
+      `Severity must be one of the following: ${announcementSeverities.join(
+        ", "
+      )}`
+    ),
 
   (req: Request, res: Response, next: NextFunction) => {
     logger.debug(
@@ -45,16 +49,17 @@ const middlewares = [
 
     if (!errors.isEmpty()) {
       logger.debug(
-        `Invalid req body provided ${JSON.stringify(
-          errors.mapped()
+        `Validation failed for create announcement req body: ${JSON.stringify(
+          req.body
         )}`
       );
-      return res.status(400).json({ errors: errors.array() });
-    }
 
-    logger.debug(
-      `Valid req body provided: ${JSON.stringify(req.query)}`
-    );
+      return res.status(400).json({
+        error: {
+          message: errors.array()[0].msg,
+        },
+      });
+    }
 
     // Attach the validated data to the request body
     req.body.title = req.body.title.trim();
