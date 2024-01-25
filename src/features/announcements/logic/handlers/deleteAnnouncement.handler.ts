@@ -22,7 +22,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
     });
   }
 
-  return res.status(202).send({
+  return res.status(200).send({
     data: deletedAnnouncement,
     message: "Announcement deleted successfully",
   });
