@@ -5,10 +5,12 @@ import { database, request, expectAnnouncementsCollectionToBeEmpty, expectRespon
 import { announcementModelName, AnnouncementType } from "../../src/features/announcements/data/models/announcement.model";
 
 describe("POST /create", () => {
+  // Connect to the database before running any tests
   beforeAll(async () => {
     await database.connect();
   });
 
+  // Disconnect from the database after running all tests
   afterAll(async () => {
     await database.disconnect();
   });
@@ -25,10 +27,13 @@ describe("POST /create", () => {
     };
 
     beforeAll(async () => {
+      // Clear the database before all tests
       await database.clear();
 
       // Make the request
       response = await request.post('/create').send(requestBody);
+
+      // Create the announcement in the database
       const announcementCreated = await mongoose
         .model(announcementModelName)
         .exists({
@@ -36,6 +41,7 @@ describe("POST /create", () => {
           ...requestBody
         });
 
+      // Ensure the announcement was created
       expect(announcementCreated).toBeTruthy();
     });
 
@@ -59,6 +65,7 @@ describe("POST /create", () => {
     });
 
     it("should create the announcement in the database", async () => {
+      // Check if the announcement was created
       const announcementCreated = await mongoose
         .model(announcementModelName)
         .exists({
@@ -66,6 +73,7 @@ describe("POST /create", () => {
           ...requestBody
         });
 
+      // Ensure the announcement was created
       expect(announcementCreated).toBeTruthy();
     });
   });
@@ -81,6 +89,7 @@ describe("POST /create", () => {
       };
 
       beforeAll(async () => {
+        // Clear the database before all tests
         await database.clear();
 
         // Make the request
@@ -113,6 +122,7 @@ describe("POST /create", () => {
       };
 
       beforeAll(async () => {
+        // Clear the database before all tests
         await database.clear();
 
         // Make the request
@@ -143,6 +153,7 @@ describe("POST /create", () => {
       };
 
       beforeAll(async () => {
+        // Clear the database before all tests
         await database.clear();
 
         // Make the request
@@ -175,6 +186,7 @@ describe("POST /create", () => {
       };
 
       beforeAll(async () => {
+        // Clear the database before all tests
         await database.clear();
 
         // Make the request
@@ -197,14 +209,17 @@ describe("POST /create", () => {
     describe("when the severity is missing", () => {
       let response: supertest.Response;
 
+      // Create the request body
       const requestBody: Partial<AnnouncementType> = {
         title: "title",
         content: "content",
       };
 
       beforeAll(async () => {
+        // Clear the database before all tests
         await database.clear();
 
+        // Make the request
         response = await request.post('/create').send(requestBody);
       });
 
@@ -234,6 +249,7 @@ describe("POST /create", () => {
       };
 
       beforeAll(async () => {
+        // Clear the database before all tests
         await database.clear();
 
         // Make the request
