@@ -1,14 +1,9 @@
 import mongoose from "mongoose";
 import supertest from "supertest";
 
-import {
-  database,
-  request,
-  expectResponseToBeError,
-} from "../index";
+import { database, request, expectResponseToBeError } from "../index";
 import {
   announcementModelName,
-  AnnouncementType,
 } from "../../src/features/announcements/data/models/announcement.model";
 
 describe("DELETE /delete/:announcementId", () => {
@@ -52,34 +47,23 @@ describe("DELETE /delete/:announcementId", () => {
     });
   });
 
-  describe("when the create request is valid", () => {
+  describe("when the announcement does not exist", () => {
     let response: supertest.Response;
-
-    // Create the request body
-    const requestBody: Partial<AnnouncementType> = {
-      title: "title",
-      content: "content",
-      severity: "info",
-    };
 
     beforeAll(async () => {
       await database.clear();
 
-      // Make the request
-      response = await request.post("/create").send(requestBody);
-
-      const announcementCreated = await mongoose
-        .model(announcementModelName)
-        .exists({
-          _id: response.body._id,
-          ...requestBody,
-        });
-
-      expect(announcementCreated).toBeTruthy();
+      response = await request.delete(
+        `/delete/${new mongoose.Types.ObjectId()}`
+      );
     });
 
-    it("should return status 201", async () => {
-      expect(response.status).toBe(201);
+    it("should return status 404", async () => {
+      expect(response.status).toBe(404);
+    });
+
+    it("should return an error message", async () => {
+      expectResponseToBeError(response);
     });
   });
 
@@ -98,6 +82,7 @@ describe("DELETE /delete/:announcementId", () => {
           title: "title",
           content: "content",
           severity: "info",
+          authorId: new mongoose.Types.ObjectId(),
         });
 
       announcementId = announcement._id.toString();
