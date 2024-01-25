@@ -25,7 +25,11 @@ const updateAnnouncementHandler = async (
   );
 
   if (!announcement) {
-    return res.status(404).json({ error: "Announcement not found" });
+    return res.status(404).json({
+      error: {
+        message: "Announcement not found",
+      },
+    });
   }
 
   const response = {
@@ -36,10 +40,11 @@ const updateAnnouncementHandler = async (
       severity: announcement.severity,
       createdAt: announcement.createdAt,
       updatedAt: announcement.updatedAt,
+      author: { username: "admin" },
     },
   };
 
-  return res.status(202).json(response);
+  return res.status(200).json(response);
 };
 
 export default updateAnnouncementHandler;

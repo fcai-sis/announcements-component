@@ -5,10 +5,12 @@ import { database, expectResponseToBeError, request } from "../index";
 import { announcementModelName, AnnouncementType } from "../../src/features/announcements/data/models/announcement.model";
 
 describe("GET /read", () => {
+  // Connect to the database before running any tests
   beforeAll(async () => {
     await database.connect();
   });
 
+  // Disconnect from the database after running all tests
   afterAll(async () => {
     await database.disconnect();
   });

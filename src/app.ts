@@ -44,7 +44,7 @@ app.use("/", router());
 
 // TODO: Custom 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.status(404).json({ message: "Not found" });
+  res.status(404).json({ error: { message: "Not found" } });
 });
 
 // TODO: Custom error handler

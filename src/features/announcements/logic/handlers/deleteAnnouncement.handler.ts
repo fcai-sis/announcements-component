@@ -16,11 +16,13 @@ const handler = async (req: HandlerRequest, res: Response) => {
 
   if (!deletedAnnouncement) {
     return res.status(404).send({
-      message: "Announcement not found",
+      error: {
+        message: "Announcement not found",
+      },
     });
   }
 
-  return res.status(202).send({
+  return res.status(200).send({
     data: deletedAnnouncement,
     message: "Announcement deleted successfully",
   });

@@ -13,7 +13,6 @@ import ensureAnnouncementIdInParamsMiddleware from "./middlewares/ensureAnnounce
 import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAccouncementRequestBody.middleware";
 
 export default (router: Router) => {
-
   /*
    * Create announcement
    **/
@@ -42,7 +41,7 @@ export default (router: Router) => {
    * Delete announcement
    **/
   router.delete(
-    "/delete",
+    "/delete/:announcementId",
 
     // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
@@ -54,7 +53,7 @@ export default (router: Router) => {
    * Archive announcement
    **/
   router.put(
-    "/archive",
+    "/archive/:announcementId",
 
     // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
