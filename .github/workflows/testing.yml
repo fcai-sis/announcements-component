@@ -1,6 +1,6 @@
-name: 7agamo3bra
+name: pushya3mr
 
-on: [push]
+on: [pull_request]
 
 jobs:
   build:
