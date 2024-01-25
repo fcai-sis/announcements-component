@@ -16,7 +16,9 @@ const handler = async (req: HandlerRequest, res: Response) => {
 
   if (!deletedAnnouncement) {
     return res.status(404).send({
-      message: "Announcement not found",
+      error: {
+        message: "Announcement not found",
+      },
     });
   }
 

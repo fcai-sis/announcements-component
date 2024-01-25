@@ -15,16 +15,35 @@ const handler = async (req: HandlerRequest, res: Response) => {
 
   if (!archivedAnnouncement) {
     return res.status(404).send({
-      error: "Announcement not found",
+      error: {
+        message: "Announcement not found",
+      }
+    });
+  }
+
+  if (archivedAnnouncement.archived) {
+    return res.status(400).send({
+      error: {
+        message: "Announcement is already archived",
+      }
     });
   }
 
   archivedAnnouncement.archived = true;
+
   await archivedAnnouncement.save();
 
-  return res.status(202).send({
-    data: archivedAnnouncement,
-    message: "Announcement has been archived successfully",
+  return res.status(200).send({
+    announcement: {
+      _id: archivedAnnouncement._id,
+      title: archivedAnnouncement.title,
+      content: archivedAnnouncement.content,
+      severity: archivedAnnouncement.severity,
+      author: { username: "admin" },
+      createdAt: archivedAnnouncement.createdAt,
+      updatedAt: archivedAnnouncement.updatedAt,
+      archived: archivedAnnouncement.archived,
+    }
   });
 };
 
