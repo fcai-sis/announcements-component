@@ -92,8 +92,8 @@ describe("DELETE /delete/:announcementId", () => {
       );
     });
 
-    it("should return status 202", async () => {
-      expect(response.status).toBe(202);
+    it("should return status 200", async () => {
+      expect(response.status).toBe(200);
     });
 
     it("should be deleted from the database", async () => {
