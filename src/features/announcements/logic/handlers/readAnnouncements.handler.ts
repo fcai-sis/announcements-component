@@ -2,22 +2,15 @@ import { Request, Response } from "express";
 
 import AnnouncementModel from "../../data/models/announcement.model";
 
-type HandlerRequest = Request<
-  {},
-  {},
-  {
-    page: number;
-    pageSize: number;
-  }
->;
+type HandlerRequest = Request;
 
 /*
  * Reads all announcements
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
   // get the pagination parameters
-  const page = req.body.page;
-  const pageSize = req.body.pageSize;
+  const page = req.context.page;
+  const pageSize = req.context.pageSize;
 
   // read the announcements from the db
   const announcements = await AnnouncementModel.find()
