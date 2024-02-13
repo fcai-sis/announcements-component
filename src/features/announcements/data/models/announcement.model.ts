@@ -2,7 +2,27 @@ import { userModelName } from "@fcai-sis/shared-models";
 import mongoose, { InferSchemaType, Schema } from "mongoose";
 
 export const announcementSeverities = ["info", "warning", "danger"] as const;
-export type AnnouncementSeverity = typeof announcementSeverities[number];
+export type AnnouncementSeverity = (typeof announcementSeverities)[number];
+export const announcementAcademicLevels = [1, 2, 3, 4] as const;
+export type AnnouncementAcademicLevel =
+  (typeof announcementAcademicLevels)[number];
+export const announcementDepartments = [
+  "CS",
+  "IT",
+  "AI",
+  "DS",
+  "IS",
+  "Special",
+  "General",
+] as const;
+export type AnnouncementDepartment =
+  | "CS"
+  | "IT"
+  | "AI"
+  | "DS"
+  | "IS"
+  | "Special"
+  | "General";
 
 const announcementSchema = new Schema({
   authorId: {
@@ -18,13 +38,23 @@ const announcementSchema = new Schema({
     type: String,
     required: true,
   },
+  academicLevel: {
+    type: Number,
+    enum: announcementAcademicLevels,
+    default: null,
+  },
+  department: {
+    type: String,
+    enum: announcementDepartments,
+    default: "General",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: null
+    default: null,
   },
   severity: {
     type: String,
@@ -34,7 +64,7 @@ const announcementSchema = new Schema({
   archived: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 export type AnnouncementType = InferSchemaType<typeof announcementSchema>;
