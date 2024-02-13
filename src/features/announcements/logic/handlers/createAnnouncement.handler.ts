@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 import { Request, Response } from "express";
 
-import AnnouncementModel, { AnnouncementSeverity } from "../../data/models/announcement.model";
+import AnnouncementModel, {
+  AnnouncementSeverity,
+} from "../../data/models/announcement.model";
 
 type HandlerRequest = Request<
   {},
@@ -10,6 +12,8 @@ type HandlerRequest = Request<
     title: string;
     content: string;
     severity: AnnouncementSeverity;
+    academicLevel?: number;
+    department?: string;
   }
 >;
 
@@ -17,7 +21,7 @@ type HandlerRequest = Request<
  * Creates an announcement.
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
-  const { title, content, severity } = req.body;
+  const { title, content, severity, academicLevel, department } = req.body;
 
   // TODO: Get the authorId from the request
   const authorId = new mongoose.Types.ObjectId();
@@ -25,6 +29,8 @@ const handler = async (req: HandlerRequest, res: Response) => {
   const announcement = new AnnouncementModel({
     title,
     content,
+    academicLevel,
+    department,
     severity,
     authorId,
   });
@@ -36,16 +42,18 @@ const handler = async (req: HandlerRequest, res: Response) => {
       _id: announcement._id,
       title: announcement.title,
       content: announcement.content,
+      academicLevel: announcement.academicLevel,
+      department: announcement.department,
       severity: announcement.severity,
       createdAt: announcement.createdAt,
       author: {
         username: "username", // TODO: Get the author's username from the database
       },
-    }
-  }
+    },
+  };
 
   return res.status(201).json(response);
-}
+};
 
 const createAnnouncementHandler = handler;
 export default createAnnouncementHandler;
