@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 import supertest from "supertest";
 
 import { database, expectResponseToBeError, request } from "../index";
-import { announcementModelName, AnnouncementType } from "../../src/features/announcements/data/models/announcement.model";
+import {
+  announcementModelName,
+  AnnouncementType,
+} from "../../src/features/announcements/data/models/announcement.model";
 
 describe("GET /read", () => {
   // Connect to the database before running any tests
@@ -22,7 +25,7 @@ describe("GET /read", () => {
       beforeAll(async () => {
         await database.clear();
 
-        response = await request.get('/read').query({
+        response = await request.get("/read").query({
           pageSize: 10,
         });
       });
@@ -42,7 +45,7 @@ describe("GET /read", () => {
       beforeAll(async () => {
         await database.clear();
 
-        response = await request.get('/read').query({
+        response = await request.get("/read").query({
           page: "abc",
           pageSize: 10,
         });
@@ -63,7 +66,7 @@ describe("GET /read", () => {
       beforeAll(async () => {
         await database.clear();
 
-        response = await request.get('/read').query({
+        response = await request.get("/read").query({
           page: 1,
         });
       });
@@ -83,7 +86,7 @@ describe("GET /read", () => {
       beforeAll(async () => {
         await database.clear();
 
-        response = await request.get('/read').query({
+        response = await request.get("/read").query({
           page: 1,
           pageSize: "abc",
         });
@@ -106,10 +109,10 @@ describe("GET /read", () => {
       beforeAll(async () => {
         await database.clear();
 
-        response = await request.get('/read').query({
+        response = await request.get("/read").query({
           page: 1,
           pageSize: 10,
-        })
+        });
       });
 
       it("should return status 200", async () => {
@@ -138,7 +141,7 @@ describe("GET /read", () => {
           title: "announcement 2",
           content: "announcement 2 content",
           severity: "danger",
-        }
+        },
       ];
 
       beforeAll(async () => {
@@ -146,7 +149,7 @@ describe("GET /read", () => {
 
         await mongoose.model(announcementModelName).create(announcements);
 
-        response = await request.get('/read').query({
+        response = await request.get("/read").query({
           page: 1,
           pageSize: 10,
         });
@@ -165,6 +168,8 @@ describe("GET /read", () => {
               title: announcements[1].title,
               content: announcements[1].content,
               severity: announcements[1].severity,
+              academicLevel: null,
+              department: "General",
               createdAt: expect.any(String),
               updatedAt: null,
             },
@@ -174,6 +179,8 @@ describe("GET /read", () => {
               title: announcements[0].title,
               content: announcements[0].content,
               severity: announcements[0].severity,
+              academicLevel: null,
+              department: "General",
               createdAt: expect.any(String),
               updatedAt: null,
             },
@@ -231,15 +238,15 @@ describe("GET /read", () => {
           await new Promise((resolve) => setTimeout(resolve, 100));
         }
 
-        page1Response = await request.get('/read').query({
+        page1Response = await request.get("/read").query({
           page: 1,
           pageSize,
         });
-        page2Response = await request.get('/read').query({
+        page2Response = await request.get("/read").query({
           page: 2,
           pageSize,
         });
-        page3Response = await request.get('/read').query({
+        page3Response = await request.get("/read").query({
           page: 3,
           pageSize,
         });
@@ -259,6 +266,8 @@ describe("GET /read", () => {
               title: announcements[4].title,
               content: announcements[4].content,
               severity: announcements[4].severity,
+              academicLevel: null,
+              department: "General",
               author: { username: expect.any(String) },
               createdAt: expect.any(String),
               updatedAt: null,
@@ -268,10 +277,12 @@ describe("GET /read", () => {
               title: announcements[3].title,
               content: announcements[3].content,
               severity: announcements[3].severity,
+              academicLevel: null,
+              department: "General",
               author: { username: expect.any(String) },
               createdAt: expect.any(String),
               updatedAt: null,
-            }
+            },
           ],
         });
         expect(page2Response.body).toEqual({
@@ -281,6 +292,8 @@ describe("GET /read", () => {
               title: announcements[2].title,
               content: announcements[2].content,
               severity: announcements[2].severity,
+              academicLevel: null,
+              department: "General",
               author: { username: expect.any(String) },
               createdAt: expect.any(String),
               updatedAt: null,
@@ -290,11 +303,13 @@ describe("GET /read", () => {
               title: announcements[1].title,
               content: announcements[1].content,
               severity: announcements[1].severity,
+              academicLevel: null,
+              department: "General",
               author: { username: expect.any(String) },
               createdAt: expect.any(String),
               updatedAt: null,
-            }
-          ]
+            },
+          ],
         });
         expect(page3Response.body).toEqual({
           announcements: [
@@ -303,11 +318,13 @@ describe("GET /read", () => {
               title: announcements[0].title,
               content: announcements[0].content,
               severity: announcements[0].severity,
+              academicLevel: null,
+              department: "General",
               author: { username: expect.any(String) },
               createdAt: expect.any(String),
               updatedAt: null,
-            }
-          ]
+            },
+          ],
         });
       });
     });

@@ -86,6 +86,8 @@ describe("PATCH /update/:announcementId", () => {
       title: "title",
       content: "content",
       severity: "info",
+      academicLevel: 3,
+      department: "CS",
       authorId: new mongoose.Types.ObjectId(),
     };
 
@@ -115,6 +117,8 @@ describe("PATCH /update/:announcementId", () => {
           title: "new title",
           content: "content",
           severity: "info",
+          academicLevel: 3,
+          department: "CS",
           _id: expect.any(String),
           author: { username: expect.any(String) },
           createdAt: expect.any(String),

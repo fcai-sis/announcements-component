@@ -1,8 +1,17 @@
 import mongoose from "mongoose";
 import supertest from "supertest";
 
-import { database, request, expectAnnouncementsCollectionToBeEmpty, expectResponseToBeError } from "../index";
-import { announcementModelName, AnnouncementType } from "../../src/features/announcements/data/models/announcement.model";
+import {
+  database,
+  request,
+  expectAnnouncementsCollectionToBeEmpty,
+  expectResponseToBeError,
+} from "../index";
+import {
+  announcementDepartments,
+  announcementModelName,
+  AnnouncementType,
+} from "../../src/features/announcements/data/models/announcement.model";
 
 describe("POST /create", () => {
   // Connect to the database before running any tests
@@ -14,7 +23,6 @@ describe("POST /create", () => {
   afterAll(async () => {
     await database.disconnect();
   });
-
 
   describe("when the request is valid", () => {
     let response: supertest.Response;
@@ -31,14 +39,14 @@ describe("POST /create", () => {
       await database.clear();
 
       // Make the request
-      response = await request.post('/create').send(requestBody);
+      response = await request.post("/create").send(requestBody);
 
       // Create the announcement in the database
       const announcementCreated = await mongoose
         .model(announcementModelName)
         .exists({
           _id: response.body.announcement._id,
-          ...requestBody
+          ...requestBody,
         });
 
       // Ensure the announcement was created
@@ -59,6 +67,8 @@ describe("POST /create", () => {
             username: expect.any(String),
           },
           severity: requestBody.severity,
+          academicLevel: null,
+          department: expect.stringMatching(announcementDepartments[6]),
           createdAt: expect.any(String),
         },
       });
@@ -70,7 +80,7 @@ describe("POST /create", () => {
         .model(announcementModelName)
         .exists({
           _id: response.body.announcement._id,
-          ...requestBody
+          ...requestBody,
         });
 
       // Ensure the announcement was created
@@ -93,7 +103,7 @@ describe("POST /create", () => {
         await database.clear();
 
         // Make the request
-        response = await request.post('/create').send(requestBody);
+        response = await request.post("/create").send(requestBody);
       });
 
       it("should return status 400", async () => {
@@ -107,7 +117,6 @@ describe("POST /create", () => {
       it("should not create the announcement in the database", async () => {
         await expectAnnouncementsCollectionToBeEmpty();
       });
-
     });
 
     describe("when the title is not a string", () => {
@@ -126,7 +135,7 @@ describe("POST /create", () => {
         await database.clear();
 
         // Make the request
-        response = await request.post('/create').send(requestBody);
+        response = await request.post("/create").send(requestBody);
       });
 
       it("should return status 400", async () => {
@@ -145,7 +154,6 @@ describe("POST /create", () => {
     describe("when the content is missing", () => {
       let response: supertest.Response;
 
-
       // Create the request body
       const requestBody: Partial<AnnouncementType> = {
         title: "title",
@@ -157,9 +165,8 @@ describe("POST /create", () => {
         await database.clear();
 
         // Make the request
-        response = await request.post('/create').send(requestBody);
+        response = await request.post("/create").send(requestBody);
       });
-
 
       it("should return status 400", async () => {
         expect(response.status).toBe(400);
@@ -190,7 +197,7 @@ describe("POST /create", () => {
         await database.clear();
 
         // Make the request
-        response = await request.post('/create').send(requestBody);
+        response = await request.post("/create").send(requestBody);
       });
 
       it("should return status 400", async () => {
@@ -220,7 +227,7 @@ describe("POST /create", () => {
         await database.clear();
 
         // Make the request
-        response = await request.post('/create').send(requestBody);
+        response = await request.post("/create").send(requestBody);
       });
 
       // Ensure the response is 400
@@ -253,7 +260,7 @@ describe("POST /create", () => {
         await database.clear();
 
         // Make the request
-        response = await request.post('/create').send(requestBody);
+        response = await request.post("/create").send(requestBody);
       });
 
       it("should return status 400", async () => {
