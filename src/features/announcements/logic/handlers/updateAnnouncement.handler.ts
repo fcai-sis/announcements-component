@@ -9,7 +9,13 @@ type UpdateHandlerRequest = Request<
     announcementId: string;
   },
   {},
-  { title?: string; content?: string; severity?: AnnouncementSeverity }
+  {
+    title?: string;
+    content?: string;
+    severity?: AnnouncementSeverity;
+    academicLevel?: number;
+    department?: string;
+  }
 >;
 
 const updateAnnouncementHandler = async (
@@ -38,6 +44,8 @@ const updateAnnouncementHandler = async (
       title: announcement.title,
       content: announcement.content,
       severity: announcement.severity,
+      academicLevel: announcement.academicLevel,
+      department: announcement.department,
       createdAt: announcement.createdAt,
       updatedAt: announcement.updatedAt,
       author: { username: "admin" },
