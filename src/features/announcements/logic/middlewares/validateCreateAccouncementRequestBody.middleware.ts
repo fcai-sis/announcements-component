@@ -2,7 +2,11 @@ import * as validator from "express-validator";
 import { NextFunction, Request, Response } from "express";
 
 import logger from "../../../../core/logger";
-import { announcementSeverities } from "../../data/models/announcement.model";
+import {
+  announcementAcademicLevels,
+  announcementDepartments,
+  announcementSeverities,
+} from "../../data/models/announcement.model";
 
 /**
  * Validates the request body of the create announcement endpoint.
@@ -38,6 +42,25 @@ const middlewares = [
         ", "
       )}`
     ),
+  validator
+    .body("academicLevel")
+    .optional()
+    .isIn(announcementAcademicLevels)
+    .withMessage(
+      `Academic level must be one of the following: ${announcementAcademicLevels.join(
+        ", "
+      )}`
+    ),
+
+  validator
+    .body("department")
+    .optional()
+    .isIn(announcementDepartments)
+    .withMessage(
+      `Department must be one of the following: ${announcementDepartments.join(
+        ", "
+      )}`
+    ),
 
   (req: Request, res: Response, next: NextFunction) => {
     logger.debug(
@@ -65,6 +88,8 @@ const middlewares = [
     req.body.title = req.body.title.trim();
     req.body.content = req.body.content.trim();
     req.body.severity = req.body.severity;
+    req.body.academicLevel = req.body.academicLevel;
+    req.body.department = req.body.department;
 
     next();
   },
