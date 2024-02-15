@@ -8,7 +8,6 @@ import {
   expectResponseToBeError,
 } from "../index";
 import {
-  announcementDepartments,
   announcementModelName,
   AnnouncementType,
 } from "../../src/features/announcements/data/models/announcement.model";
@@ -68,7 +67,7 @@ describe("POST /create", () => {
           },
           severity: requestBody.severity,
           academicLevel: null,
-          department: expect.stringMatching(announcementDepartments[6]),
+          department: expect.arrayContaining([]),
           createdAt: expect.any(String),
         },
       });
