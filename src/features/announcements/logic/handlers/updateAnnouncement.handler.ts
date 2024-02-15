@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import AnnouncementModel, {
   AnnouncementSeverity,
 } from "../../data/models/announcement.model";
+import { DepartmentType } from "@fcai-sis/shared-models";
 
 //TODO: Create middleware to check for if user authorized to update announcement
 type UpdateHandlerRequest = Request<
@@ -14,7 +15,7 @@ type UpdateHandlerRequest = Request<
     content?: string;
     severity?: AnnouncementSeverity;
     academicLevel?: number;
-    department?: string;
+    department?: DepartmentType[];
   }
 >;
 
