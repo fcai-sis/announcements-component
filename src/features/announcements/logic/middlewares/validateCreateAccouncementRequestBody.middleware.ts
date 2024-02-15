@@ -4,7 +4,6 @@ import { NextFunction, Request, Response } from "express";
 import logger from "../../../../core/logger";
 import {
   announcementAcademicLevels,
-  announcementDepartments,
   announcementSeverities,
 } from "../../data/models/announcement.model";
 
@@ -48,16 +47,6 @@ const middlewares = [
     .isIn(announcementAcademicLevels)
     .withMessage(
       `Academic level must be one of the following: ${announcementAcademicLevels.join(
-        ", "
-      )}`
-    ),
-
-  validator
-    .body("department")
-    .optional()
-    .isIn(announcementDepartments)
-    .withMessage(
-      `Department must be one of the following: ${announcementDepartments.join(
         ", "
       )}`
     ),

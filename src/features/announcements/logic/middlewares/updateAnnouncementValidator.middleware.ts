@@ -4,7 +4,6 @@ import { body, validationResult } from "express-validator";
 import logger from "../../../../core/logger";
 import {
   announcementAcademicLevels,
-  announcementDepartments,
   announcementSeverities,
 } from "../../data/models/announcement.model";
 
@@ -23,12 +22,7 @@ const updateAnnouncementValidator = [
     .withMessage(
       `Academic level must be one of these values: ${announcementAcademicLevels}`
     ),
-  body("department")
-    .optional()
-    .isIn(announcementDepartments)
-    .withMessage(
-      `Department must be one of these values: ${announcementDepartments}`
-    ),
+  
 
   (req: Request, res: Response, next: NextFunction) => {
     logger.debug(
