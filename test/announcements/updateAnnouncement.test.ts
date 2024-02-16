@@ -4,7 +4,6 @@ import supertest from "supertest";
 import {
   database,
   request,
-  expectAnnouncementsCollectionToBeEmpty,
   expectResponseToBeError,
 } from "../index";
 import {
@@ -86,6 +85,7 @@ describe("PATCH /update/:announcementId", () => {
       title: "title",
       content: "content",
       severity: "info",
+      academicLevel: 3,
       authorId: new mongoose.Types.ObjectId(),
     };
 
@@ -115,6 +115,8 @@ describe("PATCH /update/:announcementId", () => {
           title: "new title",
           content: "content",
           severity: "info",
+          academicLevel: 3,
+          department: expect.arrayContaining([]),
           _id: expect.any(String),
           author: { username: expect.any(String) },
           createdAt: expect.any(String),

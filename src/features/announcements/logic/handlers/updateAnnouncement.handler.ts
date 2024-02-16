@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import AnnouncementModel, {
   AnnouncementSeverity,
 } from "../../data/models/announcement.model";
+import { DepartmentType } from "@fcai-sis/shared-models";
 
 //TODO: Create middleware to check for if user authorized to update announcement
 type UpdateHandlerRequest = Request<
@@ -9,7 +10,13 @@ type UpdateHandlerRequest = Request<
     announcementId: string;
   },
   {},
-  { title?: string; content?: string; severity?: AnnouncementSeverity }
+  {
+    title?: string;
+    content?: string;
+    severity?: AnnouncementSeverity;
+    academicLevel?: number;
+    department?: DepartmentType[];
+  }
 >;
 
 const updateAnnouncementHandler = async (
@@ -38,6 +45,8 @@ const updateAnnouncementHandler = async (
       title: announcement.title,
       content: announcement.content,
       severity: announcement.severity,
+      academicLevel: announcement.academicLevel,
+      department: announcement.department,
       createdAt: announcement.createdAt,
       updatedAt: announcement.updatedAt,
       author: { username: "admin" },
