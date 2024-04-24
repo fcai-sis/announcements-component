@@ -6,10 +6,12 @@ import {
   announcementAcademicLevels,
   announcementSeverities,
 } from "../../data/models/announcement.model";
+import { DepartmentModel } from "@fcai-sis/shared-models";
 
 /**
  * Validates the request body of the create announcement endpoint.
  */
+
 const middlewares = [
   validator
     .body("title")
@@ -28,6 +30,28 @@ const middlewares = [
 
     .isString()
     .withMessage("Content must be a string"),
+
+  validator
+    .body("department")
+
+    .optional()
+    .isArray()
+    .withMessage("Department must be an array of department IDs")
+    .custom(async (value) => {
+      if (!(value.length === 0)) {
+        // Check if all departments exist in the database
+        const departments = await DepartmentModel.find({
+          _id: { $in: value },
+        });
+
+        if (departments.length !== value.length) {
+          throw new Error("One or more departments do not exist");
+        }
+
+        return true;
+      }
+      return true;
+    }),
 
   validator
     .body("severity")
