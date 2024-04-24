@@ -4,6 +4,7 @@ import { Request, Response } from "express";
 import AnnouncementModel, {
   AnnouncementSeverity,
 } from "../../data/models/announcement.model";
+import { EmployeeType } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
@@ -14,6 +15,7 @@ type HandlerRequest = Request<
     severity: AnnouncementSeverity;
     academicLevel?: number;
     department?: string;
+    employee: EmployeeType;
   }
 >;
 
@@ -21,10 +23,10 @@ type HandlerRequest = Request<
  * Creates an announcement.
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
-  const { title, content, severity, academicLevel, department } = req.body;
-
-  // TODO: Get the authorId from the request
-  const authorId = new mongoose.Types.ObjectId();
+  const { title, content, severity, academicLevel, department, employee } =
+    req.body;
+  // is this good
+  const authorId = employee.userId;
 
   const announcement = new AnnouncementModel({
     title,
