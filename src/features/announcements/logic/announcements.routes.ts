@@ -10,7 +10,9 @@ import deleteAnnouncementHandler from "./handlers/deleteAnnouncement.handler";
 import archiveAnnouncementHandler from "./handlers/archiveAnnouncements.handler";
 import updateAnnouncementValidator from "./middlewares/updateAnnouncementValidator.middleware";
 import ensureAnnouncementIdInParamsMiddleware from "./middlewares/ensureAnnouncementIdInParams.middleware";
-import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAccouncementRequestBody.middleware";
+import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAnnouncementRequestBody.middleware";
+import { Role, checkRole } from "@fcai-sis/shared-middlewares";
+import ensureAuthorizationMiddleware from "./middlewares/ensureAuthorization.middleware";
 
 export default (router: Router) => {
   /*
@@ -18,6 +20,10 @@ export default (router: Router) => {
    **/
   router.post(
     "/create",
+    // Ensure user is an admin or employee
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    // Ensure user is authorized
+    ensureAuthorizationMiddleware,
 
     // Validate request body
     validateCreateAnnouncementRequestBodyMiddleware,
