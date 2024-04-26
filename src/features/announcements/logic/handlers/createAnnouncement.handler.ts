@@ -25,7 +25,6 @@ type HandlerRequest = Request<
 const handler = async (req: HandlerRequest, res: Response) => {
   const { title, content, severity, academicLevel, department, employee } =
     req.body;
-  // is this good
   const authorId = employee.userId;
 
   const announcement = new AnnouncementModel({
@@ -49,7 +48,8 @@ const handler = async (req: HandlerRequest, res: Response) => {
       severity: announcement.severity,
       createdAt: announcement.createdAt,
       author: {
-        username: "username", // TODO: Get the author's username from the database
+        name: employee.fullName,
+        email: employee.email,
       },
     },
   };
