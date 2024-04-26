@@ -49,6 +49,10 @@ export default (router: Router) => {
   router.delete(
     "/delete/:announcementId",
 
+    // Ensure user is an admin or employee
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    // Ensure user is authorized
+    ensureAuthorizationMiddleware,
     // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
 
@@ -61,6 +65,10 @@ export default (router: Router) => {
   router.put(
     "/archive/:announcementId",
 
+    // Ensure user is an admin or employee
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    // Ensure user is authorized
+    ensureAuthorizationMiddleware,
     // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
 
@@ -73,6 +81,10 @@ export default (router: Router) => {
   router.patch(
     "/update/:announcementId",
 
+    // Ensure user is an admin or employee
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    // Ensure user is authorized
+    ensureAuthorizationMiddleware,
     // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
 
