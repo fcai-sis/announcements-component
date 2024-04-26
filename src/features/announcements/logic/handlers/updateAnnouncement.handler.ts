@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import AnnouncementModel, {
   AnnouncementSeverity,
 } from "../../data/models/announcement.model";
-import { DepartmentType } from "@fcai-sis/shared-models";
+import { DepartmentType, EmployeeType } from "@fcai-sis/shared-models";
 
 //TODO: Create middleware to check for if user authorized to update announcement
 type UpdateHandlerRequest = Request<
@@ -16,6 +16,7 @@ type UpdateHandlerRequest = Request<
     severity?: AnnouncementSeverity;
     academicLevel?: number;
     department?: DepartmentType[];
+    employee: EmployeeType;
   }
 >;
 
@@ -24,6 +25,7 @@ const updateAnnouncementHandler = async (
   res: Response
 ) => {
   const announcementId = req.params.announcementId;
+  const { employee } = req.body;
   // Check if the announcement exists
   const announcement = await AnnouncementModel.findByIdAndUpdate(
     announcementId,
@@ -49,7 +51,7 @@ const updateAnnouncementHandler = async (
       department: announcement.department,
       createdAt: announcement.createdAt,
       updatedAt: announcement.updatedAt,
-      author: { username: "admin" },
+      author: employee.username,
     },
   };
 
