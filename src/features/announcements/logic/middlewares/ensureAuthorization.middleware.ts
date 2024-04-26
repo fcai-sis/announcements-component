@@ -8,6 +8,7 @@ type MiddlewareRequest = Request<
   {
     user: TokenPayload;
     employee: EmployeeType;
+    // TODO: add admin type here
   }
 >;
 
