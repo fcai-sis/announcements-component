@@ -33,6 +33,8 @@ const handler = async (req: HandlerRequest, res: Response) => {
       authorId: undefined,
       author: { username: announcement.authorId.toString() },
     })),
+    page: page,
+    pageSize: pageSize,
   });
 };
 
