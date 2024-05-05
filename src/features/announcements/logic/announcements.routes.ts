@@ -11,6 +11,7 @@ import archiveAnnouncementHandler from "./handlers/archiveAnnouncements.handler"
 import updateAnnouncementValidator from "./middlewares/updateAnnouncementValidator.middleware";
 import ensureAnnouncementIdInParamsMiddleware from "./middlewares/ensureAnnouncementIdInParams.middleware";
 import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAccouncementRequestBody.middleware";
+import fetchAnnouncementHandler from "./handlers/fetchAnnouncement.handler";
 
 export default (router: Router) => {
   /*
@@ -35,6 +36,19 @@ export default (router: Router) => {
     paginationQueryParamsMiddleware,
 
     asyncHandler(readAnnouncementHandler)
+  );
+
+  /**
+   * Read announcement by id
+   */
+
+  router.get(
+    "/find/:announcementId",
+
+    // Ensure announcement id in params
+    ensureAnnouncementIdInParamsMiddleware,
+
+    asyncHandler(fetchAnnouncementHandler)
   );
 
   /*
