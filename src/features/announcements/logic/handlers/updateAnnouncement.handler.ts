@@ -4,7 +4,6 @@ import AnnouncementModel, {
 } from "../../data/models/announcement.model";
 import { DepartmentType, EmployeeType } from "@fcai-sis/shared-models";
 
-//TODO: Create middleware to check for if user authorized to update announcement
 type UpdateHandlerRequest = Request<
   {
     announcementId: string;
