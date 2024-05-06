@@ -55,6 +55,8 @@ const updateAnnouncementValidator = [
       "severity",
       "academicLevel",
       "department",
+      "user",
+      "employee",
     ];
     const receivedFields = Object.keys(req.body);
     const invalidFields = receivedFields.filter(
