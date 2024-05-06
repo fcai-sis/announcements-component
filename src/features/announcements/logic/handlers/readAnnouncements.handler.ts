@@ -16,10 +16,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
   // read the announcements from the db
   const announcements = await AnnouncementModel.find()
     // remove sensitive data from the author object
-    .populate({
-      path: "authorId",
-      select: "username",
-    })
+    .populate("authorId", "username")
     // essentially replaces the FK with the object it's referring to
     .sort({ createdAt: -1 }) // sorts so that latest announcements show up first
     .skip((page - 1) * pageSize) // pagination
@@ -31,7 +28,9 @@ const handler = async (req: HandlerRequest, res: Response) => {
       __v: undefined,
       archived: undefined,
       authorId: undefined,
-      author: { username: announcement.authorId.toString() },
+      author: {
+        username: announcement.authorId, // TODO: figure out how to remove that fucking _id
+      },
     })),
     page: page,
     pageSize: pageSize,
