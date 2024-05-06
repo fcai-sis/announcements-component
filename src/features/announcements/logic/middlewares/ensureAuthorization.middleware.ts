@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { TokenPayload } from "@fcai-sis/shared-middlewares";
+import { Role, TokenPayload } from "@fcai-sis/shared-middlewares";
 import { EmployeeModel, EmployeeType } from "@fcai-sis/shared-models";
 
 type MiddlewareRequest = Request<
@@ -17,13 +17,21 @@ const ensureAuthorizationMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userId } = req.body.user;
-  const employee = await EmployeeModel.findOne({ userId });
-  // TODO: add admin check here
-  // i guess we have to await both models since we can't tell whether the user is an admin or an employee just yet
+  const { userId, role } = req.body.user;
 
-  if (!employee) return res.status(404).json({ message: "Employee not found" });
-  req.body.employee = employee;
+  if (role === Role.EMPLOYEE) {
+    const employee = await EmployeeModel.findOne({ userId });
+    if (!employee)
+      return res.status(404).json({
+        error: {
+          message: "Employee not found",
+        },
+      });
+    req.body.employee = employee;
+  } else if (role === Role.ADMIN) {
+    // await admin here
+  }
+
   next();
 };
 
