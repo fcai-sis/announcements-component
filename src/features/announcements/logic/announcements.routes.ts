@@ -14,10 +14,7 @@ import ensureAnnouncementIdInParamsMiddleware from "./middlewares/ensureAnnounce
 import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAnnouncementRequestBody.middleware";
 import { Role, checkRole } from "@fcai-sis/shared-middlewares";
 import ensureAuthorizationMiddleware from "./middlewares/ensureAuthorization.middleware";
-
-import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAccouncementRequestBody.middleware";
 import fetchAnnouncementHandler from "./handlers/fetchAnnouncement.handler";
-
 
 export default (router: Router) => {
   /*
