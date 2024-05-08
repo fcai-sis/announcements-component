@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { Role, TokenPayload } from "@fcai-sis/shared-middlewares";
-import { EmployeeModel, EmployeeType } from "@fcai-sis/shared-models";
+import {
+  EmployeeModel,
+  EmployeeType,
+  AdminType,
+  AdminModel,
+} from "@fcai-sis/shared-models";
 
 type MiddlewareRequest = Request<
   {},
@@ -8,7 +13,7 @@ type MiddlewareRequest = Request<
   {
     user: TokenPayload;
     employee: EmployeeType;
-    admin: any; // TODO : add admin type
+    admin: AdminType;
   }
 >;
 
@@ -28,13 +33,16 @@ const ensureAuthorizationMiddleware = async (
         },
       });
     req.body.employee = employee;
-  } else if (role === Role.ADMIN) { // TODO: redo this i guess
-    const admin = {
-      name: "Admin",
-      penis: "big",
-    };
-
-    req.body.admin = admin; 
+  } else if (role === Role.ADMIN) {
+    // TODO: redo this i guess
+    const admin = await AdminModel.findOne({ userId });
+    if (!admin)
+      return res.status(404).json({
+        error: {
+          message: "Admin not found",
+        },
+      });
+    req.body.admin = admin;
   }
 
   next();
