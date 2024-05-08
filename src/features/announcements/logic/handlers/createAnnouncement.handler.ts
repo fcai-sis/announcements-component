@@ -15,7 +15,8 @@ type HandlerRequest = Request<
     severity: AnnouncementSeverity;
     academicLevel?: number;
     department?: string;
-    employee: EmployeeType;
+    employee?: EmployeeType;
+    admin?: any; // TODO : add admin type
   }
 >;
 
@@ -23,9 +24,27 @@ type HandlerRequest = Request<
  * Creates an announcement.
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
-  const { title, content, severity, academicLevel, department, employee } =
-    req.body;
-  const authorId = employee;
+  const {
+    title,
+    content,
+    severity,
+    academicLevel,
+    department,
+    employee,
+    admin,
+  } = req.body;
+  let authorId;
+  if (employee) {
+    authorId = employee;
+  } else if (admin) {
+    authorId = admin;
+  } else {
+    return res.status(400).json({
+      error: {
+        message: "User not found",
+      },
+    });
+  }
 
   const announcement = new AnnouncementModel({
     title,
@@ -48,8 +67,8 @@ const handler = async (req: HandlerRequest, res: Response) => {
       severity: announcement.severity,
       createdAt: announcement.createdAt,
       author: {
-        name: employee.fullName,
-        email: employee.email,
+        name: employee?.fullName ?? admin.name,
+        email: employee?.email ?? admin.email,
       },
     },
   };

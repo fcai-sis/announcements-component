@@ -8,7 +8,7 @@ type MiddlewareRequest = Request<
   {
     user: TokenPayload;
     employee: EmployeeType;
-    // TODO: add admin type here
+    admin: any; // TODO : add admin type
   }
 >;
 
@@ -28,8 +28,13 @@ const ensureAuthorizationMiddleware = async (
         },
       });
     req.body.employee = employee;
-  } else if (role === Role.ADMIN) {
-    // await admin here
+  } else if (role === Role.ADMIN) { // TODO: redo this i guess
+    const admin = {
+      name: "Admin",
+      penis: "big",
+    };
+
+    req.body.admin = admin; 
   }
 
   next();
