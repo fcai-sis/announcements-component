@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import AnnouncementModel, {
   AnnouncementSeverity,
 } from "../../data/models/announcement.model";
-import { EmployeeType } from "@fcai-sis/shared-models";
+import { AdminType, EmployeeType } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
@@ -16,7 +16,7 @@ type HandlerRequest = Request<
     academicLevel?: number;
     department?: string;
     employee?: EmployeeType;
-    admin?: any; // TODO : add admin type
+    admin?: AdminType;
   }
 >;
 
@@ -39,9 +39,10 @@ const handler = async (req: HandlerRequest, res: Response) => {
   } else if (admin) {
     authorId = admin;
   } else {
-    return res.status(400).json({
+    return res.status(500).json({
       error: {
-        message: "User not found",
+        message:
+          "You're accessing this route without being an employee or an admin? How did you even get here?",
       },
     });
   }
@@ -67,8 +68,8 @@ const handler = async (req: HandlerRequest, res: Response) => {
       severity: announcement.severity,
       createdAt: announcement.createdAt,
       author: {
-        name: employee?.fullName ?? admin.name,
-        email: employee?.email ?? admin.email,
+        name: employee?.fullName ?? admin?.fullName,
+        email: employee?.email ?? admin?.email,
       },
     },
   };
