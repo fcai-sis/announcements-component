@@ -14,7 +14,17 @@ const handler = async (req: HandlerRequest, res: Response) => {
   const pageSize = req.context.pageSize;
 
   // read the announcements from the db
-  const announcements = await AnnouncementModel.find()
+  const announcements = await AnnouncementModel.find(
+    {
+      archived: false,
+    },
+    {
+      // exclude the following fields
+      __v: 0,
+      archived: 0,
+      _id: 0,
+    }
+  )
     // remove sensitive data from the author object
     .populate({
       path: "authorId",
@@ -26,13 +36,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
     .limit(pageSize);
 
   return res.status(200).send({
-    announcements: announcements.map((announcement) => ({
-      ...announcement.toObject(),
-      __v: undefined,
-      archived: undefined,
-      authorId: undefined,
-      author: announcement.authorId,
-    })),
+    announcements: announcements,
     page: page,
     pageSize: pageSize,
   });
