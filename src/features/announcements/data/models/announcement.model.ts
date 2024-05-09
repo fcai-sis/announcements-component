@@ -1,4 +1,7 @@
-import { userModelName, departmentModelName } from "@fcai-sis/shared-models";
+import {
+  departmentModelName,
+  employeeModelName,
+} from "@fcai-sis/shared-models";
 import mongoose, { InferSchemaType, Schema } from "mongoose";
 
 export const announcementSeverities = ["info", "warning", "danger"] as const;
@@ -10,7 +13,7 @@ export type AnnouncementAcademicLevel =
 const announcementSchema = new Schema({
   authorId: {
     type: Schema.Types.ObjectId,
-    ref: userModelName,
+    ref: employeeModelName,
     required: true,
   },
   title: {

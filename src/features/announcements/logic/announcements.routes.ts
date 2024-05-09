@@ -10,7 +10,10 @@ import deleteAnnouncementHandler from "./handlers/deleteAnnouncement.handler";
 import archiveAnnouncementHandler from "./handlers/archiveAnnouncements.handler";
 import updateAnnouncementValidator from "./middlewares/updateAnnouncementValidator.middleware";
 import ensureAnnouncementIdInParamsMiddleware from "./middlewares/ensureAnnouncementIdInParams.middleware";
-import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAccouncementRequestBody.middleware";
+
+import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAnnouncementRequestBody.middleware";
+import { Role, checkRole } from "@fcai-sis/shared-middlewares";
+import ensureAuthorizationMiddleware from "./middlewares/ensureAuthorization.middleware";
 import fetchAnnouncementHandler from "./handlers/fetchAnnouncement.handler";
 
 export default (router: Router) => {
@@ -19,6 +22,10 @@ export default (router: Router) => {
    **/
   router.post(
     "/create",
+    // Ensure user is an admin or employee
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    // Ensure user is authorized
+    ensureAuthorizationMiddleware,
 
     // Validate request body
     validateCreateAnnouncementRequestBodyMiddleware,
@@ -57,6 +64,10 @@ export default (router: Router) => {
   router.delete(
     "/delete/:announcementId",
 
+    // Ensure user is an admin or employee
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    // Ensure user is authorized
+    ensureAuthorizationMiddleware,
     // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
 
@@ -69,6 +80,10 @@ export default (router: Router) => {
   router.put(
     "/archive/:announcementId",
 
+    // Ensure user is an admin or employee
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    // Ensure user is authorized
+    ensureAuthorizationMiddleware,
     // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
 
@@ -81,6 +96,10 @@ export default (router: Router) => {
   router.patch(
     "/update/:announcementId",
 
+    // Ensure user is an admin or employee
+    checkRole([Role.EMPLOYEE, Role.ADMIN]),
+    // Ensure user is authorized
+    ensureAuthorizationMiddleware,
     // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
 

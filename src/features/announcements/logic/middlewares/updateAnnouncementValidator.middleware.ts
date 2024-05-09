@@ -6,6 +6,7 @@ import {
   announcementAcademicLevels,
   announcementSeverities,
 } from "../../data/models/announcement.model";
+import { DepartmentModel } from "@fcai-sis/shared-models";
 
 const updateAnnouncementValidator = [
   body("title").optional().isString().withMessage("Title must be a string"),
@@ -16,26 +17,46 @@ const updateAnnouncementValidator = [
     .withMessage(
       `Severity must be one of these values: ${announcementSeverities}`
     ),
+  body("department")
+    .optional()
+    .isArray()
+    .withMessage("Department must be an array of department IDs")
+    .custom(async (value) => {
+      if (!(value.length === 0)) {
+        // Check if all departments exist in the database
+        const departments = await DepartmentModel.find({
+          _id: { $in: value },
+        });
+
+        if (departments.length !== value.length) {
+          throw new Error("One or more departments do not exist");
+        }
+
+        return true;
+      }
+      return true;
+    }),
   body("academicLevel")
     .optional()
     .isIn(announcementAcademicLevels)
     .withMessage(
       `Academic level must be one of these values: ${announcementAcademicLevels}`
     ),
-  
 
   (req: Request, res: Response, next: NextFunction) => {
     logger.debug(
       `Validating update announcement req body: ${JSON.stringify(req.body)}`
     );
 
-    // if the request body contains any field other than "title", "content", "severity", return an error
+    // if the request body contains any field other than the following, return an error
     const allowedFields = [
       "title",
       "content",
       "severity",
       "academicLevel",
       "department",
+      "user",
+      "employee",
     ];
     const receivedFields = Object.keys(req.body);
     const invalidFields = receivedFields.filter(
