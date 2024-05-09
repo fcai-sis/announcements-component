@@ -4,7 +4,6 @@ import { Request, Response } from "express";
 import AnnouncementModel, {
   AnnouncementSeverity,
 } from "../../data/models/announcement.model";
-import { AdminType, EmployeeType } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
@@ -15,8 +14,6 @@ type HandlerRequest = Request<
     severity: AnnouncementSeverity;
     academicLevel?: number;
     department?: string;
-    employee?: EmployeeType;
-    admin?: AdminType;
   }
 >;
 
@@ -24,28 +21,10 @@ type HandlerRequest = Request<
  * Creates an announcement.
  * */
 const handler = async (req: HandlerRequest, res: Response) => {
-  const {
-    title,
-    content,
-    severity,
-    academicLevel,
-    department,
-    employee,
-    admin,
-  } = req.body;
-  let authorId;
-  if (employee) {
-    authorId = employee;
-  } else if (admin) {
-    authorId = admin;
-  } else {
-    return res.status(500).json({
-      error: {
-        message:
-          "You're accessing this route without being an employee or an admin? How did you even get here?",
-      },
-    });
-  }
+  const { title, content, severity, academicLevel, department } = req.body;
+
+  // TODO: Get the authorId from the request
+  const authorId = new mongoose.Types.ObjectId();
 
   const announcement = new AnnouncementModel({
     title,
@@ -68,8 +47,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
       severity: announcement.severity,
       createdAt: announcement.createdAt,
       author: {
-        name: employee?.fullName ?? admin?.fullName,
-        email: employee?.email ?? admin?.email,
+        username: "username", // TODO: Get the author's username from the database
       },
     },
   };

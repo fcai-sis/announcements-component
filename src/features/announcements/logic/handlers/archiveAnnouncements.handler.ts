@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 
 import AnnouncementModel from "../../data/models/announcement.model";
 
-type HandlerRequest = Request<{ announcementId: string }>;
+type HandlerRequest = Request<{ announcementId: string; }
+>;
 /*
  * Archives an announcement, gets deleted automatically after a year
  * */
@@ -16,7 +17,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
     return res.status(404).send({
       error: {
         message: "Announcement not found",
-      },
+      }
     });
   }
 
@@ -24,7 +25,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
     return res.status(400).send({
       error: {
         message: "Announcement is already archived",
-      },
+      }
     });
   }
 
@@ -38,11 +39,11 @@ const handler = async (req: HandlerRequest, res: Response) => {
       title: archivedAnnouncement.title,
       content: archivedAnnouncement.content,
       severity: archivedAnnouncement.severity,
-      author: archivedAnnouncement.authorId,
+      author: { username: "admin" },
       createdAt: archivedAnnouncement.createdAt,
       updatedAt: archivedAnnouncement.updatedAt,
       archived: archivedAnnouncement.archived,
-    },
+    }
   });
 };
 

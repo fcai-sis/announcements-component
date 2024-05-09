@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import AnnouncementModel, {
   AnnouncementSeverity,
 } from "../../data/models/announcement.model";
-import { DepartmentType, EmployeeType } from "@fcai-sis/shared-models";
+import { DepartmentType } from "@fcai-sis/shared-models";
 
+//TODO: Create middleware to check for if user authorized to update announcement
 type UpdateHandlerRequest = Request<
   {
     announcementId: string;
@@ -15,7 +16,6 @@ type UpdateHandlerRequest = Request<
     severity?: AnnouncementSeverity;
     academicLevel?: number;
     department?: DepartmentType[];
-    employee: EmployeeType;
   }
 >;
 
@@ -24,19 +24,10 @@ const updateAnnouncementHandler = async (
   res: Response
 ) => {
   const announcementId = req.params.announcementId;
-  const { employee, title, content, severity, academicLevel, department } =
-    req.body;
   // Check if the announcement exists
   const announcement = await AnnouncementModel.findByIdAndUpdate(
     announcementId,
-    {
-      ...(title && { title }),
-      ...(content && { content }),
-      ...(severity && { severity }),
-      ...(academicLevel && { academicLevel }),
-      ...(department && { department }),
-      updatedAt: new Date(),
-    },
+    { ...req.body, updatedAt: Date.now() },
     { new: true }
   );
 
@@ -58,7 +49,7 @@ const updateAnnouncementHandler = async (
       department: announcement.department,
       createdAt: announcement.createdAt,
       updatedAt: announcement.updatedAt,
-      author: employee.username,
+      author: { username: "admin" },
     },
   };
 
