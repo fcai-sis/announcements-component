@@ -24,11 +24,19 @@ const updateAnnouncementHandler = async (
   res: Response
 ) => {
   const announcementId = req.params.announcementId;
-  const { employee } = req.body;
+  const { employee, title, content, severity, academicLevel, department } =
+    req.body;
   // Check if the announcement exists
   const announcement = await AnnouncementModel.findByIdAndUpdate(
     announcementId,
-    { ...req.body, updatedAt: Date.now() },
+    {
+      ...(title && { title }),
+      ...(content && { content }),
+      ...(severity && { severity }),
+      ...(academicLevel && { academicLevel }),
+      ...(department && { department }),
+      updatedAt: new Date(),
+    },
     { new: true }
   );
 
