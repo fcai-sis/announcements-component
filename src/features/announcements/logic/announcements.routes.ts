@@ -21,7 +21,7 @@ export default (router: Router) => {
    * Create announcement
    **/
   router.post(
-    "/create",
+    "/",
     // Ensure user is an admin or employee
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
     // Ensure user is authorized
@@ -37,7 +37,7 @@ export default (router: Router) => {
    * Read paginated announcements
    **/
   router.get(
-    "/read",
+    "/",
 
     // Validate request query params for pagination
     paginationQueryParamsMiddleware,
@@ -50,7 +50,7 @@ export default (router: Router) => {
    */
 
   router.get(
-    "/find/:announcementId",
+    "/:announcementId",
 
     // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
@@ -62,7 +62,7 @@ export default (router: Router) => {
    * Delete announcement
    **/
   router.delete(
-    "/delete/:announcementId",
+    "/:announcementId",
 
     // Ensure user is an admin or employee
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
@@ -94,7 +94,7 @@ export default (router: Router) => {
    * Update announcement
    **/
   router.patch(
-    "/update/:announcementId",
+    "/:announcementId",
 
     // Ensure user is an admin or employee
     checkRole([Role.EMPLOYEE, Role.ADMIN]),
