@@ -34,7 +34,6 @@ const ensureAuthorizationMiddleware = async (
       });
     req.body.employee = employee;
   } else if (role === Role.ADMIN) {
-    // TODO: redo this i guess
     const admin = await AdminModel.findOne({ userId });
     if (!admin)
       return res.status(404).json({
