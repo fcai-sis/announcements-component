@@ -2,6 +2,7 @@ import cors from "cors";
 import morgan from "morgan";
 import helmet from "helmet";
 import compression from "compression";
+import cookieParser from "cookie-parser";
 import express, { NextFunction, Request, Response } from "express";
 
 import router from "./router";
@@ -45,8 +46,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Parse cookies
+app.use(cookieParser());
+
 // Mount API routes
-app.use("/announcement", router());
+app.use("/", router());
 
 // TODO: Custom 404 handler
 app.use((req: Request, res: Response, next: NextFunction) => {
