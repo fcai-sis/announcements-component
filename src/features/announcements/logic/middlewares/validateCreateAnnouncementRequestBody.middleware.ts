@@ -16,7 +16,7 @@ const middlewares = [
   validator
     .body("title")
 
-    .exists()
+    .exists({ checkFalsy: true, checkNull: true })
     .withMessage("Title is required")
 
     .isString()
@@ -25,7 +25,7 @@ const middlewares = [
   validator
     .body("content")
 
-    .exists()
+    .exists({ checkFalsy: true, checkNull: true })
     .withMessage("Content is required")
 
     .isString()
