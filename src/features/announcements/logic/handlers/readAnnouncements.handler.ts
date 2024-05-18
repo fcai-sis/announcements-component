@@ -22,7 +22,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
       // exclude the following fields
       __v: 0,
       archived: 0,
-      _id: 0,
+      // _id: 0,
     }
   )
     // remove sensitive data from the author object
