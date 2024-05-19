@@ -2,8 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import { Role, TokenPayload } from "@fcai-sis/shared-middlewares";
 import {
   EmployeeModel,
-  EmployeeType,
-  AdminType,
+  IEmployee,
+  IAdmin,
   AdminModel,
 } from "@fcai-sis/shared-models";
 
@@ -12,8 +12,8 @@ type MiddlewareRequest = Request<
   {},
   {
     user: TokenPayload;
-    employee: EmployeeType;
-    admin: AdminType;
+    employee: IEmployee;
+    admin: IAdmin;
   }
 >;
 
@@ -22,7 +22,7 @@ const ensureAuthorizationMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { userId, role } = req.body.user;
+  const { id: userId, role } = req.body.user;
 
   if (role === Role.EMPLOYEE) {
     const employee = await EmployeeModel.findOne({ userId });

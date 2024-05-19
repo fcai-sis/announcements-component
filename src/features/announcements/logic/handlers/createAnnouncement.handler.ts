@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import AnnouncementModel, {
   AnnouncementSeverity,
 } from "../../data/models/announcement.model";
-import { AdminType, EmployeeType } from "@fcai-sis/shared-models";
+import { IAdmin, IEmployee } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
@@ -15,8 +15,8 @@ type HandlerRequest = Request<
     severity: AnnouncementSeverity;
     academicLevel?: number;
     department?: string;
-    employee?: EmployeeType;
-    admin?: AdminType;
+    employee?: IEmployee;
+    admin?: IAdmin;
   }
 >;
 
