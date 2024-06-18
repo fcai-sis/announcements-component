@@ -13,6 +13,10 @@ const handler = async (req: HandlerRequest, res: Response) => {
   const page = req.context.page;
   const pageSize = req.context.pageSize;
 
+  const totalAnnouncements = await AnnouncementModel.countDocuments({
+    archived: false,
+  });
+
   // read the announcements from the db
   const announcements = await AnnouncementModel.find(
     {
@@ -39,6 +43,7 @@ const handler = async (req: HandlerRequest, res: Response) => {
     announcements: announcements,
     page: page,
     pageSize: pageSize,
+    totalAnnouncements,
   });
 };
 
