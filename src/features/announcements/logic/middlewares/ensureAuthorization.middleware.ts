@@ -22,7 +22,7 @@ const ensureAuthorizationMiddleware = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id: userId, role } = req.body.user;
+  const { userId, role } = req.body.user;
 
   if (role === Role.EMPLOYEE) {
     const employee = await EmployeeModel.findOne({ userId });
