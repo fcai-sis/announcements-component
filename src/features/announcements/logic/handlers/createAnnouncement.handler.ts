@@ -1,81 +1,56 @@
-import mongoose from "mongoose";
 import { Request, Response } from "express";
 
+import { TokenPayload } from "@fcai-sis/shared-middlewares";
+import { EmployeeModel, IEmployee } from "@fcai-sis/shared-models";
+
 import AnnouncementModel, {
-  AnnouncementSeverity,
+  IAnnouncement,
 } from "../../data/models/announcement.model";
-import { IAdmin, IEmployee } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
   {},
   {
-    title: string;
-    content: string;
-    severity: AnnouncementSeverity;
-    academicLevel?: number;
-    department?: string;
-    employee?: IEmployee;
-    admin?: IAdmin;
+    user: TokenPayload;
+    announcement: Partial<IAnnouncement>;
   }
 >;
 
-/*
- * Creates an announcement.
- * */
-const handler = async (req: HandlerRequest, res: Response) => {
+const createAnnouncementHandler = async (
+  req: HandlerRequest,
+  res: Response
+) => {
   const {
-    title,
-    content,
-    severity,
-    academicLevel,
-    department,
-    employee,
-    admin,
+    announcement,
+    user: { userId },
   } = req.body;
-  let authorId;
-  if (employee) {
-    authorId = employee;
-  } else if (admin) {
-    authorId = admin;
-  } else {
-    return res.status(500).json({
+
+  const author = await EmployeeModel.findOne({ user: userId });
+
+  if (!author) {
+    return res.status(404).json({
       error: {
-        message:
-          "You're accessing this route without being an employee or an admin? How did you even get here?",
+        message: "Author not found",
       },
     });
   }
 
-  const announcement = new AnnouncementModel({
-    title,
-    content,
-    academicLevel,
-    department,
-    severity,
-    authorId,
+  const createdAnnouncement = new AnnouncementModel({
+    title: announcement.title,
+    content: announcement.content,
+    author,
+    severity: announcement.severity,
   });
 
-  await announcement.save();
+  await createdAnnouncement.save();
 
-  const response = {
+  return res.status(201).send({
     announcement: {
-      _id: announcement._id,
-      title: announcement.title,
-      content: announcement.content,
-      academicLevel: announcement.academicLevel,
-      department: announcement.department,
-      severity: announcement.severity,
-      createdAt: announcement.createdAt,
-      author: {
-        name: employee?.fullName ?? admin?.fullName,
-        email: employee?.email ?? admin?.email,
-      },
+      ...announcement,
+      author: { fullName: author.fullName },
+      __v: undefined,
     },
-  };
-
-  return res.status(201).json(response);
+  });
 };
 
-const createAnnouncementHandler = handler;
 export default createAnnouncementHandler;

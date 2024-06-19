@@ -3,14 +3,20 @@ import { Request, Response } from "express";
 import AnnouncementModel from "../../data/models/announcement.model";
 
 type HandlerRequest = Request<{ announcementId: string }>;
-/*
- * Archives an announcement, gets deleted automatically after a year
- * */
-const handler = async (req: HandlerRequest, res: Response) => {
-  const announcement = req.params.announcementId;
 
-  // archive the announcement by setting archived to true
-  const archivedAnnouncement = await AnnouncementModel.findById(announcement);
+/**
+ * Archives an announcement for deletion.
+ */
+const archiveAnnouncementHandler = async (
+  req: HandlerRequest,
+  res: Response
+) => {
+  const archivedAnnouncement = await AnnouncementModel.findById(
+    req.params.announcementId
+  ).populate({
+    path: "author",
+    select: "fullName -_id",
+  });
 
   if (!archivedAnnouncement) {
     return res.status(404).send({
@@ -29,21 +35,14 @@ const handler = async (req: HandlerRequest, res: Response) => {
   }
 
   archivedAnnouncement.archived = true;
-
   await archivedAnnouncement.save();
 
-  return res.status(200).send({
+  return res.status(200).json({
     announcement: {
-      _id: archivedAnnouncement._id,
-      title: archivedAnnouncement.title,
-      content: archivedAnnouncement.content,
-      severity: archivedAnnouncement.severity,
-      author: archivedAnnouncement.authorId,
-      createdAt: archivedAnnouncement.createdAt,
-      updatedAt: archivedAnnouncement.updatedAt,
-      archived: archivedAnnouncement.archived,
+      ...archivedAnnouncement.toJSON(),
+      __v: undefined,
     },
   });
 };
 
-export default handler;
+export default archiveAnnouncementHandler;

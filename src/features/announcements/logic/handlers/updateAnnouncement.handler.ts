@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import AnnouncementModel, {
-  AnnouncementSeverity,
+  AnnouncementSeverityEnumType,
 } from "../../data/models/announcement.model";
 import { IDepartment, IEmployee } from "@fcai-sis/shared-models";
 
@@ -12,7 +12,7 @@ type UpdateHandlerRequest = Request<
   {
     title?: string;
     content?: string;
-    severity?: AnnouncementSeverity;
+    severity?: AnnouncementSeverityEnumType;
     academicLevel?: number;
     department?: IDepartment[];
     employee: IEmployee;
@@ -28,12 +28,13 @@ const updateAnnouncementHandler = async (
     req.body;
   // Check if the announcement exists
   const announcement = await AnnouncementModel.findByIdAndUpdate(
+    // FIXME: Use findById and save instead of findByIdAndUpdate
     announcementId,
     {
       ...(title && { title }),
       ...(content && { content }),
       ...(severity && { severity }),
-      ...(academicLevel && { academicLevel }),
+      ...(academicLevel && { level: academicLevel }),
       ...(department && { department }),
       updatedAt: new Date(),
     },
@@ -54,7 +55,7 @@ const updateAnnouncementHandler = async (
       title: announcement.title,
       content: announcement.content,
       severity: announcement.severity,
-      academicLevel: announcement.academicLevel,
+      academicLevel: announcement.level,
       department: announcement.department,
       createdAt: announcement.createdAt,
       updatedAt: announcement.updatedAt,

@@ -1,54 +1,61 @@
+import mongoose from "mongoose";
+
 import {
-  departmentModelName,
+  betweenValidator,
   employeeModelName,
+  foreignKey,
 } from "@fcai-sis/shared-models";
-import mongoose, { InferSchemaType, Schema } from "mongoose";
 
-export const announcementSeverities = ["info", "warning", "danger"] as const;
-export type AnnouncementSeverity = (typeof announcementSeverities)[number];
-export const announcementAcademicLevels = [1, 2, 3, 4] as const;
-export type AnnouncementAcademicLevel =
-  (typeof announcementAcademicLevels)[number];
+export const announcementModelName = "Announcement";
 
-const announcementSchema = new Schema({
-  authorId: {
-    type: Schema.Types.ObjectId,
-    ref: employeeModelName,
-    required: true,
-  },
+export const AnnouncementSeveritiesEnum = [
+  "INFO",
+  "WARNING",
+  "DANGER",
+] as const;
+export type AnnouncementSeverityEnumType =
+  (typeof AnnouncementSeveritiesEnum)[number];
+
+export interface IAnnouncement {
+  author: mongoose.Schema.Types.ObjectId;
+  title: string;
+  content: string;
+  levels?: number[];
+  departments?: mongoose.Schema.Types.ObjectId[];
+  createdAt: Date;
+  severity: AnnouncementSeverityEnumType;
+  archived: boolean;
+}
+
+const announcementSchema = new mongoose.Schema<IAnnouncement>({
+  author: foreignKey(employeeModelName),
   title: {
     type: String,
     required: true,
+    validate: {
+      validator: (v: string) =>
+        betweenValidator("Title length", v.length, 1, 255),
+    },
   },
   content: {
     type: String,
     required: true,
   },
-  academicLevel: {
-    type: Number,
-    enum: announcementAcademicLevels,
-    default: null,
+  levels: {
+    type: [Number],
+    required: false,
   },
-  department: {
-    type: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: departmentModelName,
-      },
-    ],
-    default: null,
+  departments: {
+    type: [mongoose.Schema.Types.ObjectId],
+    required: false,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  updatedAt: {
-    type: Date,
-    default: null,
-  },
   severity: {
     type: String,
-    enum: announcementSeverities,
+    enum: AnnouncementSeveritiesEnum,
     required: true,
   },
   archived: {
@@ -57,15 +64,8 @@ const announcementSchema = new Schema({
   },
 });
 
-export type AnnouncementType = InferSchemaType<typeof announcementSchema>;
-// Add TTL (Time To Live) index to 'archived' field
-announcementSchema.index({ archived: 1 }, { expireAfterSeconds: 31536000 }); // Delete after a year
-
-export const announcementModelName = "Announcement";
-
-const AnnouncementModel = mongoose.model<AnnouncementType>(
-  announcementModelName,
-  announcementSchema
-);
+const AnnouncementModel =
+  mongoose.models.Announcement ||
+  mongoose.model<IAnnouncement>(announcementModelName, announcementSchema);
 
 export default AnnouncementModel;

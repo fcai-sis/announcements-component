@@ -9,11 +9,13 @@ type HandlerRequest = Request<
   {}
 >;
 
-const handler = async (req: HandlerRequest, res: Response) => {
-  const announcementId = req.params.announcementId;
-
-  // find the announcement
-  const announcement = await AnnouncementModel.findById(announcementId);
+const fetchAnnouncementHandler = async (req: HandlerRequest, res: Response) => {
+  const announcement = await AnnouncementModel.findById(
+    req.params.announcementId
+  ).populate({
+    path: "author",
+    select: "fullName -_id",
+  });
 
   if (!announcement) {
     return res.status(404).json({
@@ -25,10 +27,10 @@ const handler = async (req: HandlerRequest, res: Response) => {
 
   return res.status(200).send({
     announcement: {
-      ...announcement.toObject(),
+      ...announcement.toJSON(),
+      __v: undefined,
     },
   });
 };
 
-const fetchAnnouncementHandler = handler;
 export default fetchAnnouncementHandler;

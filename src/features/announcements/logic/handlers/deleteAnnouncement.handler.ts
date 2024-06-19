@@ -4,15 +4,19 @@ import AnnouncementModel from "../../data/models/announcement.model";
 
 type HandlerRequest = Request<{ announcementId: string }>;
 
-/*
+/**
  * Deletes an announcement.
- * */
-const handler = async (req: HandlerRequest, res: Response) => {
-  const announcement = req.params.announcementId;
-
+ */
+const deleteAnnouncementHandler = async (
+  req: HandlerRequest,
+  res: Response
+) => {
   const deletedAnnouncement = await AnnouncementModel.findByIdAndDelete(
-    announcement
-  );
+    req.params.announcementId
+  ).populate({
+    path: "author",
+    select: "fullName -_id",
+  });
 
   if (!deletedAnnouncement) {
     return res.status(404).send({
@@ -22,11 +26,13 @@ const handler = async (req: HandlerRequest, res: Response) => {
     });
   }
 
-  return res.status(200).send({
-    data: deletedAnnouncement,
+  return res.status(204).json({
+    announcement: {
+      ...deletedAnnouncement,
+      __v: undefined,
+    },
     message: "Announcement deleted successfully",
   });
 };
 
-const deleteAnnouncementHandler = handler;
 export default deleteAnnouncementHandler;

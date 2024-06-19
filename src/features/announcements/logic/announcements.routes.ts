@@ -1,111 +1,48 @@
 import { Router } from "express";
 
 import { asyncHandler } from "@fcai-sis/shared-utilities";
-import { paginationQueryParamsMiddleware } from "@fcai-sis/shared-middlewares";
 
-import readAnnouncementHandler from "./handlers/readAnnouncements.handler";
+import fetchPaginatedAnnouncements from "./handlers/fetchPaginatedAnnouncements.handler";
 import createAnnouncementHandler from "./handlers/createAnnouncement.handler";
-import updateAnnouncementHandler from "./handlers/updateAnnouncement.handler";
 import deleteAnnouncementHandler from "./handlers/deleteAnnouncement.handler";
 import archiveAnnouncementHandler from "./handlers/archiveAnnouncements.handler";
-import updateAnnouncementValidator from "./middlewares/updateAnnouncementValidator.middleware";
-import ensureAnnouncementIdInParamsMiddleware from "./middlewares/ensureAnnouncementIdInParams.middleware";
-
-import validateCreateAnnouncementRequestBodyMiddleware from "./middlewares/validateCreateAnnouncementRequestBody.middleware";
-import { Role, checkRole } from "@fcai-sis/shared-middlewares";
-import ensureAuthorizationMiddleware from "./middlewares/ensureAuthorization.middleware";
 import fetchAnnouncementHandler from "./handlers/fetchAnnouncement.handler";
+import ensureAnnouncementIdInParamsMiddleware from "./middlewares/ensureAnnouncementIdInParams.middleware";
+import validateCreateAnnouncementRequestMiddleware from "./middlewares/validateCreateAnnouncementRequest.middleware";
+import { Role, checkRole } from "@fcai-sis/shared-middlewares";
 
 export default (router: Router) => {
-  /*
-   * Create announcement
-   **/
+  // Create announcement
   router.post(
     "/",
-    // Ensure user is an admin or employee
-    checkRole([Role.EMPLOYEE, Role.ADMIN]),
-    // Ensure user is authorized
-    ensureAuthorizationMiddleware,
-
-    // Validate request body
-    validateCreateAnnouncementRequestBodyMiddleware,
-
+    checkRole([Role.EMPLOYEE]),
+    validateCreateAnnouncementRequestMiddleware,
     asyncHandler(createAnnouncementHandler)
   );
 
-  /*
-   * Read paginated announcements
-   **/
-  router.get(
-    "/",
+  // Fetch paginated announcements
+  router.get("/", fetchPaginatedAnnouncements);
 
-    // Validate request query params for pagination
-    paginationQueryParamsMiddleware,
-
-    asyncHandler(readAnnouncementHandler)
-  );
-
-  /**
-   * Read announcement by id
-   */
-
+  // Fetch announcement by ID
   router.get(
     "/:announcementId",
-
-    // Ensure announcement id in params
     ensureAnnouncementIdInParamsMiddleware,
-
     asyncHandler(fetchAnnouncementHandler)
   );
 
-  /*
-   * Delete announcement
-   **/
+  // Delete announcement
   router.delete(
     "/:announcementId",
-
-    // Ensure user is an admin or employee
-    checkRole([Role.EMPLOYEE, Role.ADMIN]),
-    // Ensure user is authorized
-    ensureAuthorizationMiddleware,
-    // Ensure announcement id in params
+    checkRole([Role.EMPLOYEE]),
     ensureAnnouncementIdInParamsMiddleware,
-
     asyncHandler(deleteAnnouncementHandler)
   );
 
-  /*
-   * Archive announcement
-   **/
+  // Archive announcement
   router.put(
     "/archive/:announcementId",
-
-    // Ensure user is an admin or employee
-    checkRole([Role.EMPLOYEE, Role.ADMIN]),
-    // Ensure user is authorized
-    ensureAuthorizationMiddleware,
-    // Ensure announcement id in params
+    checkRole([Role.EMPLOYEE]),
     ensureAnnouncementIdInParamsMiddleware,
-
     asyncHandler(archiveAnnouncementHandler)
-  );
-
-  /*
-   * Update announcement
-   **/
-  router.patch(
-    "/:announcementId",
-
-    // Ensure user is an admin or employee
-    checkRole([Role.EMPLOYEE, Role.ADMIN]),
-    // Ensure user is authorized
-    ensureAuthorizationMiddleware,
-    // Ensure announcement id in params
-    ensureAnnouncementIdInParamsMiddleware,
-
-    // Validate request body
-    updateAnnouncementValidator,
-
-    asyncHandler(updateAnnouncementHandler)
   );
 };
