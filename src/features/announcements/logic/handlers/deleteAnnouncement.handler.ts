@@ -1,6 +1,5 @@
+import { AnnouncementModel } from "@fcai-sis/shared-models";
 import { Request, Response } from "express";
-
-import AnnouncementModel from "../../data/models/announcement.model";
 
 type HandlerRequest = Request<{ announcementId: string }>;
 

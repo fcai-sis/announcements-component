@@ -1,7 +1,9 @@
 import * as validator from "express-validator";
 import { validateRequestMiddleware } from "@fcai-sis/shared-middlewares";
-import { AnnouncementSeveritiesEnum } from "../../data/models/announcement.model";
-import { DepartmentModel } from "@fcai-sis/shared-models";
+import {
+  AnnouncementSeveritiesEnum,
+  DepartmentModel,
+} from "@fcai-sis/shared-models";
 
 /**
  * Validates the request of the create announcement endpoint.

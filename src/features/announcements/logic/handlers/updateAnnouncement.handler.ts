@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
-import AnnouncementModel, {
+import {
+  AnnouncementModel,
   AnnouncementSeverityEnumType,
-} from "../../data/models/announcement.model";
-import { IDepartment, IEmployee } from "@fcai-sis/shared-models";
+  IDepartment,
+  IEmployee,
+} from "@fcai-sis/shared-models";
 
 type UpdateHandlerRequest = Request<
   {

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
-import AnnouncementModel from "../../data/models/announcement.model";
 import paginate from "express-paginate";
 import { asyncHandler } from "@fcai-sis/shared-utilities";
+import { AnnouncementModel } from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request;
 

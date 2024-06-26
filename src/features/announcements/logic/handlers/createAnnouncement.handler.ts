@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
 
 import { TokenPayload } from "@fcai-sis/shared-middlewares";
-import { EmployeeModel, IEmployee } from "@fcai-sis/shared-models";
-
-import AnnouncementModel, {
-  IAnnouncement,
-} from "../../data/models/announcement.model";
+import {
+  AnnouncementModel,
+  AnnouncementType,
+  EmployeeModel,
+} from "@fcai-sis/shared-models";
 
 type HandlerRequest = Request<
   {},
   {},
   {
     user: TokenPayload;
-    announcement: Partial<IAnnouncement>;
+    announcement: Partial<AnnouncementType>;
   }
 >;
 
@@ -35,18 +35,16 @@ const createAnnouncementHandler = async (
     });
   }
 
-  const createdAnnouncement = new AnnouncementModel({
-    title: announcement.title,
-    content: announcement.content,
+  const createdAnnouncement = await AnnouncementModel.create({
+    title: announcement.title!,
+    content: announcement.content!,
     author,
-    severity: announcement.severity,
+    severity: announcement.severity!,
   });
-
-  await createdAnnouncement.save();
 
   return res.status(201).send({
     announcement: {
-      ...announcement,
+      ...createdAnnouncement,
       author: { fullName: author.fullName },
       __v: undefined,
     },

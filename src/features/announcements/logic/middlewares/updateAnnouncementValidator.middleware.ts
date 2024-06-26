@@ -1,7 +1,6 @@
 import * as validator from "express-validator";
 import { NextFunction, Request, Response } from "express";
-
-import { AnnouncementSeveritiesEnum } from "../../data/models/announcement.model";
+import { AnnouncementSeveritiesEnum } from "@fcai-sis/shared-models";
 
 /**
  * Validates the request body of the update announcement endpoint.
