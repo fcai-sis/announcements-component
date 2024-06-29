@@ -10,6 +10,7 @@ import fetchAnnouncementHandler from "./handlers/fetchAnnouncement.handler";
 import ensureAnnouncementIdInParamsMiddleware from "./middlewares/ensureAnnouncementIdInParams.middleware";
 import validateCreateAnnouncementRequestMiddleware from "./middlewares/validateCreateAnnouncementRequest.middleware";
 import { Role, checkRole } from "@fcai-sis/shared-middlewares";
+import filterAnnouncementsMiddleware from "./middlewares/filterAnnouncements.middleware";
 
 export default (router: Router) => {
   // Create announcement
@@ -21,7 +22,7 @@ export default (router: Router) => {
   );
 
   // Fetch paginated announcements
-  router.get("/", fetchPaginatedAnnouncements);
+  router.get("/", filterAnnouncementsMiddleware, fetchPaginatedAnnouncements);
 
   // Fetch announcement by ID
   router.get(

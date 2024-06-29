@@ -40,11 +40,13 @@ const createAnnouncementHandler = async (
     content: announcement.content!,
     author,
     severity: announcement.severity!,
+    departments: announcement.departments,
+    levels: announcement.levels,
   });
 
   return res.status(201).send({
     announcement: {
-      ...createdAnnouncement,
+      ...createdAnnouncement.toJSON(),
       author: { fullName: author.fullName },
       __v: undefined,
     },
