@@ -14,8 +14,6 @@ const readAnnouncementsHandler = [
   asyncHandler(async (req: HandlerRequest, res: Response) => {
     const { department, severity, level } = req.query;
 
-    console.log(req.query);
-
     const allDepartments = await DepartmentModel.find();
     const d = allDepartments.find((d) => d.code === department);
 
