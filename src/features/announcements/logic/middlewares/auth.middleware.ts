@@ -38,9 +38,11 @@ const authMiddleware = [
 
       if (!author) {
         return res.status(404).json({
-          error: {
-            message: "Author not found",
-          },
+          errors: [
+            {
+              message: "Author not found",
+            },
+          ],
         });
       }
 

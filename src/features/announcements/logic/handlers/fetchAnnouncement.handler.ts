@@ -19,9 +19,11 @@ const fetchAnnouncementHandler = async (req: HandlerRequest, res: Response) => {
 
   if (!announcement) {
     return res.status(404).json({
-      error: {
-        message: "Announcement not found",
-      },
+      errors: [
+        {
+          message: "Announcement not found",
+        },
+      ],
     });
   }
 

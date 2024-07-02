@@ -19,17 +19,21 @@ const archiveAnnouncementHandler = async (
 
   if (!archivedAnnouncement) {
     return res.status(404).send({
-      error: {
-        message: "Announcement not found",
-      },
+      errors: [
+        {
+          message: "Announcement not found",
+        },
+      ],
     });
   }
 
   if (archivedAnnouncement.archived) {
     return res.status(400).send({
-      error: {
-        message: "Announcement is already archived",
-      },
+      errors: [
+        {
+          message: "Announcement is already archived",
+        },
+      ],
     });
   }
 

@@ -19,9 +19,11 @@ const deleteAnnouncementHandler = async (
 
   if (!deletedAnnouncement) {
     return res.status(404).send({
-      error: {
-        message: "Announcement not found",
-      },
+      errors: [
+        {
+          message: "Announcement not found",
+        },
+      ],
     });
   }
 
