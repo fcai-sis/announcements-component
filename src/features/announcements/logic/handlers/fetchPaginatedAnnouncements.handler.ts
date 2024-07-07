@@ -26,7 +26,7 @@ const readAnnouncementsHandler = [
     const total = await AnnouncementModel.countDocuments(filter);
     const announcements = await AnnouncementModel.find(filter)
       .sort({ createdAt: -1 })
-      .skip(Number(req.query.skip) ?? 0)
+      .skip(req.skip ?? 0)
       .limit(req.query.limit as unknown as number);
 
     return res.status(200).json({
